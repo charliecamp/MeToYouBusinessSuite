@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create New Order</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/create-order.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="page">
+
+<header class="order-header">
+
+<a href="dashboard.html" class="back-button">
+
+← Back
+
+</a>
+
+<img
+src="images/logo.png"
+class="logo"
+alt="Me To You Designs">
+
+<h1>Create New Order</h1>
+
+<div class="heart">
+
+♡
+
+</div>
+
+</header>
+
+<!-- Customer Details goes here -->
+
+<!-- Items Ordered goes here -->
+
+<!-- Order Details goes here -->
+
+<!-- Payment goes here -->
+
+<!-- Delivery goes here -->
+
+<!-- Order Progress goes here -->
+
+<!-- Save Button goes here -->
+
+</div>
+
+<script src="js/create-order.js"></script>
+
+</body>
+
+</html>
+
+<section class="card">
+
+<h2>👤 Customer Details</h2>
+
+<label>Customer Name</label>
+
+<input
+id="customerName"
+type="text"
+placeholder="Customer name">
+
+<label>Customer Contact</label>
+
+<input
+id="customerContact"
+type="text"
+placeholder="Phone number or email">
+
+<label>Where Ordered From</label>
+
+<select id="orderSource">
+
+<option>Facebook</option>
+<option>Instagram</option>
+<option>Snapchat</option>
+<option>TikTok</option>
+<option>Website</option>
+<option>Other</option>
+
+</select>
+
+<label>Social Username</label>
+
+<input
+id="socialUsername"
+type="text"
+placeholder="@username">
+
+</section>
+
+<section class="card">
+
+<h2>📦 Items Ordered</h2>
+
+<div id="itemsContainer">
+
+<div class="itemCard">
+
+<label>Product</label>
+
+<input
+type="text"
+class="itemProduct"
+placeholder="Example: Balloon Arch">
+
+<label>Quantity</label>
+
+<input
+type="number"
+class="itemQuantity"
+value="1"
+min="1">
+
+<label>Unit Price (£)</label>
+
+<input
+type="number"
+class="itemPrice"
+value="0.00"
+step="0.01">
+
+<label>Item Total (£)</label>
+
+<input
+type="number"
+class="itemTotal"
+value="0.00"
+readonly>
+
+<label>Size (Optional)</label>
+
+<input
+type="text"
+class="itemSize"
+placeholder="Large">
+
+<label>Colour / Theme</label>
+
+<input
+type="text"
+class="itemColour"
+placeholder="Bluey, Pink, Football...">
+
+<label>Personalised?</label>
+
+<select class="itemPersonalised">
+
+<option>No</option>
+
+<option>Yes</option>
+
+</select>
+
+<div class="personalisationBox">
+
+<label>Personalisation</label>
+
+<textarea
+class="itemPersonalisation"
+placeholder="Name, wording or message..."></textarea>
+
+</div>
+
+<button
+type="button"
+class="removeItemButton">
+
+❌ Remove Item
+
+</button>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addItemButton">
+
+➕ Add Another Item
+
+</button>
+
+</section>
+
+<section class="card">
+
+<h2>📝 Order Details</h2>
+
+<label>Order Number</label>
+
+<input
+id="orderNumber"
+type="text"
+readonly>
+
+<label>Order Date</label>
+
+<input
+id="orderDate"
+type="date">
+
+<label>Date Needed By</label>
+
+<section class="card">
+
+<h2>💷 Payment</h2>
+
+<label>Order Total (£)</label>
+<input
+id="orderTotal"
+type="number"
+value="0.00"
+readonly>
+
+<label>Payment Status</label>
+<input
+id="paymentStatus"
+type="text"
+value="Not Paid"
+readonly>
+
+<label>Total Paid (£)</label>
+<input
+id="totalPaid"
+type="number"
+value="0.00"
+readonly>
+
+<label>Remaining Balance (£)</label>
+<input
+id="remainingBalance"
+type="number"
+value="0.00"
+readonly>
+
+<h3>📜 Payment History</h3>
+
+<div id="paymentHistory">
+
+<p>No payments recorded yet.</p>
+
+</div>
+
+<label>Payment Date</label>
+
+<input
+id="paymentDate"
+type="date">
+
+<label>Amount (£)</label>
+
+<input
+id="paymentAmount"
+type="number"
+step="0.01"
+placeholder="0.00">
+
+<label>Payment Method</label>
+
+<select id="paymentMethod">
+
+<option>Cash</option>
+<option>Bank Transfer</option>
+<option>Card</option>
+<option>PayPal</option>
+<option>Other</option>
+
+</select>
+
+<label>Notes</label>
+
+<textarea
+id="paymentNotes"
+placeholder="Deposit, final payment, etc."></textarea>
+
+<button
+type="button"
+id="savePaymentButton">
+
+💗 Save Payment
+
+</button>
+
+</section>
+
+<section class="card">
+
+<h2>🚚 Delivery</h2>
+
+<label>Delivery Method</label>
+
+<select id="deliveryMethod">
+
+<option>Collection</option>
+<option>Local Delivery</option>
+<option>Royal Mail</option>
+<option>Evri</option>
+<option>InPost</option>
+
+</select>
+
+<div id="deliveryAddress">
+
+<label>Address Line 1</label>
+<input
+id="address1"
+type="text">
+
+<label>Address Line 2</label>
+<input
+id="address2"
+type="text">
+
+<label>Town / City</label>
+<input
+id="town"
+type="text">
+
+<label>County</label>
+<input
+id="county"
+type="text">
+
+<label>Postcode</label>
+<input
+id="postcode"
+type="text">
+
+</div>
+
+</section>
+
+<section class="card">
+
+<h2>✨ Order Progress</h2>
+
+<label>Order Progress</label>
+
+<select id="orderStatus">
+
+<option>New Order</option>
+<option>Designing</option>
+<option>Making</option>
+<option>Ready</option>
+<option>Completed</option>
+
+</select>
+
+<div class="progressIcons">
+
+<div>📝<br>New Order</div>
+
+<div>🎨<br>Designing</div>
+
+<div>🛠️<br>Making</div>
+
+<div>📦<br>Ready</div>
+
+<div>✅<br>Completed</div>
+
+</div>
+
+</section>
+
+<section class="card">
+
+<button
+type="button"
+id="saveOrderButton">
+
+💗 Save Order
+
+</button>
+
+</section>
+
+</div>
+
+<script src="js/create-order.js"></script>
+
+</body>
+
+</html>
