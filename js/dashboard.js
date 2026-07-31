@@ -108,3 +108,118 @@ document.addEventListener("DOMContentLoaded",()=>{
     console.log("Dashboard Loaded");
 
 });
+
+// ======================================
+// TODAY'S JOBS
+// ======================================
+
+const jobsList =
+document.getElementById("jobsList");
+
+const addJobButton =
+document.getElementById("addJobButton");
+
+if(addJobButton){
+
+    addJobButton.addEventListener("click",addJob);
+
+}
+
+loadJobs();
+
+function addJob(){
+
+    const job =
+    prompt("Add today's job");
+
+    if(!job) return;
+
+    jobs.push(job);
+
+    saveJobs();
+
+}
+
+function saveJobs(){
+
+    localStorage.setItem(
+        "todayJobs",
+        JSON.stringify(jobs)
+    );
+
+    loadJobs();
+
+}
+
+function loadJobs(){
+
+    if(!jobsList) return;
+
+    jobsList.innerHTML = "";
+
+    jobs.forEach((job,index)=>{
+
+        const li =
+        document.createElement("li");
+
+        li.innerHTML = `
+
+<span>${job}</span>
+
+<div>
+
+<button
+class="completeButton">
+
+✅
+
+</button>
+
+<button
+class="deleteButton">
+
+🗑️
+
+</button>
+
+</div>
+
+`;
+
+        li.querySelector(".completeButton")
+        .addEventListener("click",()=>{
+
+            completeJob(index);
+
+        });
+
+        li.querySelector(".deleteButton")
+        .addEventListener("click",()=>{
+
+            deleteJob(index);
+
+        });
+
+        jobsList.appendChild(li);
+
+    });
+
+}
+
+function completeJob(index){
+
+    jobs.splice(index,1);
+
+    saveJobs();
+
+}
+
+function deleteJob(index){
+
+    if(!confirm("Delete this job?")) return;
+
+    jobs.splice(index,1);
+
+    saveJobs();
+
+}
