@@ -410,3 +410,156 @@ toggleButtons.forEach((button,index)=>{
     });
 
 });
+
+// ======================================
+// DASHBOARD STATISTICS
+// ======================================
+
+updateDashboard();
+
+function updateDashboard(){
+
+    updateStats();
+
+    calculateDueDates();
+
+    loadNextOrder();
+
+    loadOutstandingPayments();
+
+    calculateRevenue();
+
+}
+
+// ======================================
+// TOTAL ORDERS / PENDING
+// ======================================
+
+function updateStats(){
+
+    const totalOrders =
+    document.getElementById("totalOrders");
+
+    const pendingOrders =
+    document.getElementById("pendingOrders");
+
+    if(totalOrders){
+
+        totalOrders.textContent =
+        orders.length;
+
+    }
+
+    if(pendingOrders){
+
+        const pending =
+        orders.filter(order=>
+
+            order.orderProgress !== "Completed"
+
+        );
+
+        pendingOrders.textContent =
+        pending.length;
+
+    }
+
+}
+
+// ======================================
+// DUE DATES
+// ======================================
+
+function calculateDueDates(){
+
+    const today =
+    new Date();
+
+    let week = 0;
+    let month = 0;
+
+    orders.forEach(order=>{
+
+        if(!order.dateNeeded) return;
+
+        const due =
+        new Date(order.dateNeeded);
+
+        const diff =
+        (due-today)/(1000*60*60*24);
+
+        if(diff>=0 && diff<=7){
+
+            week++;
+
+        }
+
+        if(
+
+            due.getMonth()===today.getMonth()
+
+            &&
+
+            due.getFullYear()===today.getFullYear()
+
+        ){
+
+            month++;
+
+        }
+
+    });
+
+    document.getElementById("dueWeek").textContent =
+    week;
+
+    document.getElementById("dueMonth").textContent =
+    month;
+
+}
+
+// ======================================
+// PLACEHOLDERS
+// ======================================
+
+function loadNextOrder(){
+
+    const card =
+    document.getElementById("nextOrderCard");
+
+    if(card){
+
+        card.innerHTML =
+
+        "<p>No upcoming orders.</p>";
+
+    }
+
+}
+
+function loadOutstandingPayments(){
+
+    const paymentList =
+    document.getElementById("paymentList");
+
+    if(paymentList){
+
+        paymentList.innerHTML =
+
+        "<p>No outstanding payments.</p>";
+
+    }
+
+}
+
+function calculateRevenue(){
+
+    document.getElementById("todayRevenue").textContent="£0.00";
+
+    document.getElementById("weekRevenue").textContent="£0.00";
+
+    document.getElementById("monthRevenue").textContent="£0.00";
+
+    document.getElementById("totalRevenue").textContent="£0.00";
+
+}
