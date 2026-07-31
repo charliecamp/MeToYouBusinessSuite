@@ -146,9 +146,91 @@ function calculateRevenue(){
 
 }
 
-// ---------- DAILY NOTES ----------
-
 // ---------- NOTES ----------
+
+let notes =
+JSON.parse(localStorage.getItem("notes")) || [];
+
+const notesList =
+document.getElementById("notesList");
+
+const addNoteButton =
+document.getElementById("addNoteButton");
+
+function saveNotes(){
+
+    localStorage.setItem(
+        "notes",
+        JSON.stringify(notes)
+    );
+
+}
+
+function loadNotes(){
+
+    if(!notesList) return;
+
+    notesList.innerHTML = "";
+
+    notes.forEach((note,index)=>{
+
+        notesList.innerHTML += `
+<li>
+
+<span>${note}</span>
+
+<button
+class="deleteButton"
+data-index="${index}">
+
+🗑️
+
+</button>
+
+</li>
+`;
+
+    });
+
+    document.querySelectorAll(".deleteButton").forEach(button=>{
+
+        button.addEventListener("click",()=>{
+
+            const index =
+            Number(button.dataset.index);
+
+            notes.splice(index,1);
+
+            saveNotes();
+
+            loadNotes();
+
+        });
+
+    });
+
+}
+
+if(addNoteButton){
+
+    addNoteButton.addEventListener("click",()=>{
+
+        const note =
+        prompt("Add note");
+
+        if(!note) return;
+
+        notes.push(note);
+
+        saveNotes();
+
+        loadNotes();
+
+    });
+
+}
+
+loadNotes();
 
 let notes =
 JSON.parse(localStorage.getItem("notes")) || [];
