@@ -323,3 +323,30 @@ logoutButton.addEventListener("click",(e)=>{
 });
 
 }
+// ---------- COLLAPSIBLE CARDS ----------
+
+const toggleButtons = document.querySelectorAll(".toggleButton");
+
+toggleButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const card = button.closest(".dashboardCard");
+
+        const content = card.querySelector(".cardContent");
+
+        if(content.style.display === "none"){
+
+            content.style.display = "block";
+            button.textContent = "▼";
+
+        }else{
+
+            content.style.display = "none";
+            button.textContent = "▲";
+
+        }
+
+    });
+
+});
