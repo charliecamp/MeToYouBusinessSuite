@@ -1,0 +1,565 @@
+/* =================================
+   ME TO YOU DESIGNS DASHBOARD
+================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    min-height:100vh;
+
+    background:
+    linear-gradient(
+        180deg,
+        #fff8fb,
+        #f8e3ed
+    );
+
+    color:#735566;
+
+    overflow-x:hidden;
+
+    font-family:'Poppins',sans-serif;
+
+}
+
+/* Faint Logo Background */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    background:url("../logo.PNG") center 45% no-repeat;
+
+    background-size:300px;
+
+    opacity:.035;
+
+    pointer-events:none;
+
+    z-index:-1;
+
+}
+
+/* MAIN */
+
+#app{
+
+    max-width:430px;
+
+    margin:auto;
+
+    padding:12px 18px 100px;
+
+}
+
+/* MENU BUTTON */
+
+.topBar{
+
+    height:45px;
+
+}
+
+#menuButton{
+
+    width:45px;
+
+    height:45px;
+
+    border:none;
+
+    border-radius:15px;
+
+    background:white;
+
+    font-size:24px;
+
+    color:#c46c91;
+
+    cursor:pointer;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,.08);
+
+}
+
+/* WELCOME */
+
+.welcomeSection{
+
+    text-align:center;
+
+    margin-top:-10px;
+
+    margin-bottom:18px;
+
+}
+
+.topLogo{
+
+    width:75px;
+
+    display:block;
+
+    margin:0 auto 5px;
+
+}
+
+.welcomeSection h1{
+
+    font-family:'Dancing Script',cursive;
+
+    font-size:38px;
+
+    font-weight:600;
+
+    color:#985b78;
+
+    white-space:nowrap;
+
+}
+
+.heartDivider{
+
+    font-size:24px;
+
+    color:#d98bab;
+
+    margin:2px;
+
+}
+
+#todayDate{
+
+    font-size:15px;
+
+    color:#987786;
+
+}
+
+/* TOP COUNT BOXES */
+
+.statsGrid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:12px;
+
+    margin-bottom:18px;
+
+}
+
+.statCard{
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:14px 8px;
+
+    text-align:center;
+
+    box-shadow:
+    0 8px 20px rgba(210,150,175,.18);
+
+}
+
+.statIcon{
+
+    font-size:24px;
+
+}
+
+.statCard h3{
+
+    font-size:13px;
+
+    font-weight:500;
+
+    color:#856676;
+
+    margin-top:5px;
+
+}
+
+.statCard h2{
+
+    font-size:26px;
+
+    color:#d47fa2;
+
+    margin-top:5px;
+
+}
+/* DASHBOARD CARDS */
+
+.dashboardCard{
+
+    background:white;
+
+    border-radius:22px;
+
+    margin-bottom:15px;
+
+    box-shadow:
+    0 8px 20px rgba(210,150,175,.15);
+
+    overflow:hidden;
+
+}
+
+.cardHeader{
+
+    padding:16px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    font-size:16px;
+
+    font-weight:600;
+
+}
+
+.toggleButton{
+
+    border:none;
+
+    background:none;
+
+    color:#d47fa2;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+}
+
+.cardContent{
+
+    padding:0 16px 16px;
+
+}
+
+/* ADD BUTTON */
+
+.addButton{
+
+    width:100%;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:#db91b0;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.addButton:hover{
+
+    background:#cf7ea1;
+
+    transform:translateY(-2px);
+
+}
+
+/* LISTS */
+
+ul{
+
+    list-style:none;
+
+}
+
+li{
+
+    background:#fff3f7;
+
+    padding:12px;
+
+    border-radius:14px;
+
+    margin-top:10px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+/* REVENUE */
+
+.revenueGrid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:10px;
+
+}
+
+.revenueCard{
+
+    background:#fff2f7;
+
+    border-radius:16px;
+
+    padding:14px;
+
+    text-align:center;
+
+}
+
+.revenueCard h4{
+
+    font-size:13px;
+
+    color:#806273;
+
+}
+
+.revenueCard p{
+
+    margin-top:5px;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    color:#d47fa2;
+
+}
+/* BOTTOM NAVIGATION */
+
+.bottomNav{
+
+    position:fixed;
+
+    bottom:12px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:85%;
+
+    max-width:360px;
+
+    background:white;
+
+    border-radius:25px;
+
+    padding:10px;
+
+    display:flex;
+
+    justify-content:space-around;
+
+    align-items:center;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.15);
+
+    z-index:100;
+
+}
+
+.bottomButton{
+
+    text-decoration:none;
+
+    color:#735566;
+
+    text-align:center;
+
+    font-size:13px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:4px;
+
+}
+
+.bottomButton span{
+
+    font-size:12px;
+
+}
+
+.addOrder{
+
+    color:#d47fa2;
+
+    font-weight:700;
+
+}
+
+/* SIDE MENU */
+
+#sideMenu{
+
+    position:fixed;
+
+    top:0;
+
+    left:-280px;
+
+    width:270px;
+
+    height:100vh;
+
+    background:white;
+
+    z-index:1000;
+
+    transition:.3s;
+
+    box-shadow:
+    5px 0 25px rgba(0,0,0,.15);
+
+}
+
+#sideMenu.active{
+
+    left:0;
+
+}
+
+.menuHeader{
+
+    text-align:center;
+
+    padding:25px;
+
+    background:#ffeaf2;
+
+}
+
+.menuLogo{
+
+    width:85px;
+
+    margin-bottom:10px;
+
+}
+
+.menuHeader h2{
+
+    font-family:'Dancing Script',cursive;
+
+    font-size:34px;
+
+    color:#985b78;
+
+}
+
+.menuLinks a{
+
+    display:block;
+
+    padding:16px 22px;
+
+    color:#735566;
+
+    text-decoration:none;
+
+    border-bottom:1px solid #eee;
+
+    transition:.2s;
+
+}
+
+.menuLinks a:hover{
+
+    background:#fff3f7;
+
+    color:#d47fa2;
+
+}
+
+/* OVERLAY */
+
+#overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.30);
+
+    display:none;
+
+    z-index:999;
+
+}
+
+#overlay.active{
+
+    display:block;
+
+}
+
+/* RESPONSIVE */
+
+@media (max-width:430px){
+
+    #app{
+
+        padding:12px 15px 100px;
+
+    }
+
+    .welcomeSection h1{
+
+        font-size:34px;
+
+    }
+
+    .statsGrid{
+
+        gap:10px;
+
+    }
+
+    .statCard{
+
+        padding:12px 8px;
+
+    }
+
+}
