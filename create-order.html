@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Create Order | Me To You Designs</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="css/create-order.css">
+
+</head>
+
+<body>
+
+<div id="overlay"></div>
+
+<!-- SIDE MENU -->
+
+<nav id="sideMenu">
+
+<div class="menuHeader">
+
+<img
+src="logo.PNG"
+class="menuLogo"
+alt="Logo">
+
+<h2>Me To You Designs</h2>
+
+</div>
+
+<div class="menuLinks">
+
+<a href="dashboard.html">🏠 Dashboard</a>
+
+<a href="create-order.html">➕ Create Order</a>
+
+<a href="orders.html">📦 View Orders</a>
+
+<a href="customers.html">👥 Customers</a>
+
+<a href="calendar.html">📅 Calendar</a>
+
+<a href="payments.html">💷 Payments</a>
+
+<a href="invoices.html">🧾 Invoices</a>
+
+<a href="settings.html">⚙️ Settings</a>
+
+<a href="#" id="logoutButton">🚪 Log Out</a>
+
+</div>
+
+</nav>
+
+<div id="app">
+
+<header class="topBar">
+
+<button id="menuButton">
+
+☰
+
+</button>
+
+</header>
+
+<section class="welcomeSection">
+
+<img
+src="logo.PNG"
+class="topLogo"
+alt="Logo">
+
+<h1>
+
+Create New Order
+
+</h1>
+
+<div class="heartDivider">
+
+♡
+
+</div>
+
+<p>
+
+Complete the form below to create a new customer order.
+
+</p>
+
+</section>
+
+<!-- ORDER SUMMARY -->
+
+<section class="dashboardCard">
+
+<div class="cardHeader">
+
+📋 Order Summary
+
+</div>
+
+<div class="cardContent">
+
+<div class="summaryGrid">
+
+<div>
+
+<label>Order Number</label>
+
+<input
+id="orderNumber"
+type="text"
+readonly>
+
+</div>
+
+<div>
+
+<label>Order Date</label>
+
+<input
+id="orderDate"
+type="date">
+
+</div>
+
+<div>
+
+<label>Status</label>
+
+<select id="orderProgress">
+
+<option>New Order</option>
+<option>Designing</option>
+<option>Making</option>
+<option>Ready</option>
+<option>Completed</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
