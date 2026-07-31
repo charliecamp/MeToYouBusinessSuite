@@ -167,25 +167,28 @@ function loadNotes(){
 
 notesList.innerHTML = "";
 
+notesList.innerHTML = "";
+
 notes.forEach((note,index)=>{
 
     notesList.innerHTML += `
-<li data-index="${index}">
-${note}
+<li>
+
+<span>${note}</span>
+
+<button
+class="deleteButton"
+onclick="deleteNote(${index})">
+
+🗑️
+
+</button>
+
 </li>
 `;
 
 });
 
-document.querySelectorAll("#notesList li").forEach(item=>{
-
-    item.addEventListener("click",()=>{
-
-        editNote(item.dataset.index);
-
-    });
-
-});
 
 if(addNoteButton){
 
@@ -237,7 +240,20 @@ function editNote(index){
     loadNotes();
 
 }
+function deleteNote(index){
 
+    if(!confirm("Delete this note?")) return;
+
+    notes.splice(index,1);
+
+    localStorage.setItem(
+        "notes",
+        JSON.stringify(notes)
+    );
+
+    loadNotes();
+
+}
 // ---------- TODAY'S JOBS ----------
 
 let jobs =
