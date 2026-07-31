@@ -563,3 +563,31 @@ function calculateRevenue(){
     document.getElementById("totalRevenue").textContent="£0.00";
 
 }
+
+// ---------- QUICK ACTIONS ----------
+
+const createOrderButton =
+document.getElementById("createOrderButton");
+
+if(createOrderButton){
+
+    createOrderButton.addEventListener("click",()=>{
+
+        window.location.href="create-order.html";
+
+    });
+
+}
+
+const viewOrdersButton =
+document.getElementById("viewOrdersButton");
+
+if(viewOrdersButton){
+
+    viewOrdersButton.addEventListener("click",()=>{
+
+        window.location.href="orders.html";
+
+    });
+
+}
