@@ -165,19 +165,27 @@ function loadNotes(){
 
     if(!notesList) return;
 
-    notesList.innerHTML = "";
+notesList.innerHTML = "";
 
-    notes.forEach((note,index)=>{
+notes.forEach((note,index)=>{
 
-        notesList.innerHTML += `
-<li onclick="editNote(${index})">
+    notesList.innerHTML += `
+<li data-index="${index}">
 ${note}
 </li>
 `;
 
+});
+
+document.querySelectorAll("#notesList li").forEach(item=>{
+
+    item.addEventListener("click",()=>{
+
+        editNote(item.dataset.index);
+
     });
 
-}
+});
 
 if(addNoteButton){
 
