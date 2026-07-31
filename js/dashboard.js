@@ -332,10 +332,9 @@ toggleButtons.forEach(button => {
     button.addEventListener("click", () => {
 
         const card = button.closest(".dashboardCard");
-
         const content = card.querySelector(".cardContent");
 
-        if(content.style.display === "none"){
+        if(getComputedStyle(content).display === "none"){
 
             content.style.display = "block";
             button.textContent = "▼";
@@ -343,7 +342,7 @@ toggleButtons.forEach(button => {
         }else{
 
             content.style.display = "none";
-            button.textContent = "▲";
+            button.textContent = "▶";
 
         }
 
