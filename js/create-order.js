@@ -276,10 +276,39 @@ if(addPaymentButton){
 function addPayment(){
 
     const amount = Number(
-
         prompt("Payment amount (£):")
-
     );
+
+    if(isNaN(amount) || amount <= 0){
+        return;
+    }
+
+    payments.push(amount);
+
+    const paid = payments.reduce((a,b)=>a+b,0);
+
+    totalPaid.value = paid.toFixed(2);
+
+    const orderTotal =
+        Number(document.getElementById("orderTotal").value);
+
+    remainingBalance.value =
+        (orderTotal - paid).toFixed(2);
+
+    if(paid <= 0){
+        paymentStatus.value = "Not Paid";
+    }else if(paid < orderTotal){
+        paymentStatus.value = "Part Paid";
+    }else{
+        paymentStatus.value = "Paid";
+    }
+
+    paymentHistory.innerHTML =
+        payments.map((p,i)=>
+            `<p>Payment ${i+1}: £${p.toFixed(2)}</p>`
+        ).join("");
+
+}
 
 // =====================================
 // SAVE ORDER
