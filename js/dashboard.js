@@ -351,3 +351,62 @@ function deleteNote(index){
     saveNotes();
 
 }
+
+// ======================================
+// COLLAPSIBLE CARDS
+// ======================================
+
+const toggleButtons =
+document.querySelectorAll(".toggleButton");
+
+toggleButtons.forEach((button,index)=>{
+
+    const card =
+    button.closest(".dashboardCard");
+
+    const content =
+    card.querySelector(".cardContent");
+
+    const storageKey =
+    "card_" + index;
+
+    const savedState =
+    localStorage.getItem(storageKey);
+
+    if(savedState==="open"){
+
+        content.style.display="block";
+
+        button.textContent="▼";
+
+    }else{
+
+        content.style.display="none";
+
+        button.textContent="▶";
+
+    }
+
+    button.addEventListener("click",()=>{
+
+        if(content.style.display==="none"){
+
+            content.style.display="block";
+
+            button.textContent="▼";
+
+            localStorage.setItem(storageKey,"open");
+
+        }else{
+
+            content.style.display="none";
+
+            button.textContent="▶";
+
+            localStorage.setItem(storageKey,"closed");
+
+        }
+
+    });
+
+});
