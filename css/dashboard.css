@@ -231,9 +231,13 @@ body::before{
 
     align-items:center;
 
-    font-size:16px;
+    font-family:Georgia, serif;
+
+    font-size:21px;
 
     font-weight:600;
+
+    color:#6f4a5d;
 
 }
 
