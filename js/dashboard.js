@@ -148,8 +148,10 @@ function calculateRevenue(){
 
 // ---------- DAILY NOTES ----------
 
+// ---------- NOTES ----------
+
 let notes =
-JSON.parse(localStorage.getItem("dailyNotes")) || [];
+JSON.parse(localStorage.getItem("notes")) || [];
 
 const notesList =
 document.getElementById("notesList");
@@ -163,17 +165,15 @@ function loadNotes(){
 
     if(!notesList) return;
 
-    notesList.innerHTML="";
+    notesList.innerHTML = "";
 
     notes.forEach((note,index)=>{
 
-        notesList.innerHTML +=
-
-        `<li>
-
-        ${note}
-
-        </li>`;
+        notesList.innerHTML += `
+<li onclick="editNote(${index})">
+${note}
+</li>
+`;
 
     });
 
@@ -181,23 +181,52 @@ function loadNotes(){
 
 if(addNoteButton){
 
-addNoteButton.addEventListener("click",()=>{
+    addNoteButton.addEventListener("click",()=>{
 
-    const note =
-    prompt("Add today's note");
+        const note = prompt("Add note");
 
-    if(!note) return;
+        if(!note) return;
 
-    notes.push(note);
+        notes.push(note);
+
+        localStorage.setItem(
+            "notes",
+            JSON.stringify(notes)
+        );
+
+        loadNotes();
+
+    });
+
+}
+
+function editNote(index){
+
+    const current = notes[index];
+
+    const updated = prompt(
+        "Edit note (leave blank to delete):",
+        current
+    );
+
+    if(updated === null) return;
+
+    if(updated.trim() === ""){
+
+        notes.splice(index,1);
+
+    }else{
+
+        notes[index] = updated;
+
+    }
 
     localStorage.setItem(
-        "dailyNotes",
+        "notes",
         JSON.stringify(notes)
     );
 
     loadNotes();
-
-});
 
 }
 
