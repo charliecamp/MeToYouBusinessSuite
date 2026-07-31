@@ -141,12 +141,6 @@ placeholder="@username">
 
 </section>
 
-<script src="js/create-order.js"></script>
-
-</body>
-
-</html>
-
 <!-- ===================================== -->
 <!-- ORDER SUMMARY -->
 <!-- ===================================== -->
@@ -291,3 +285,250 @@ id="postcode"
 type="text">
 
 </section>
+
+<!-- ===================================== -->
+<!-- ITEMS ORDERED -->
+<!-- ===================================== -->
+
+<section class="card">
+
+<h2>
+
+📦 Items Ordered
+
+</h2>
+
+<div id="itemsContainer">
+
+<div class="itemCard">
+
+<label>
+
+Product / Item
+
+</label>
+
+<input
+type="text"
+class="itemName"
+placeholder="Example: Balloon Stack">
+
+<label>
+
+Quantity
+
+</label>
+
+<input
+type="number"
+class="itemQuantity"
+value="1"
+min="1">
+
+<label>
+
+Unit Price (£)
+
+</label>
+
+<input
+type="number"
+class="itemPrice"
+value="0"
+step="0.01">
+
+<label>
+
+Item Total (£)
+
+</label>
+
+<input
+type="number"
+class="itemTotal"
+value="0.00"
+readonly>
+
+<label>
+
+Description / Theme
+
+</label>
+
+<textarea
+class="itemDescription"
+placeholder="Colours, wording, theme, etc."></textarea>
+
+<button
+type="button"
+class="removeItemButton">
+
+🗑 Remove Item
+
+</button>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addItemButton">
+
+➕ Add Another Item
+
+</button>
+
+</section>
+
+<!-- ===================================== -->
+<!-- ORDER NOTES -->
+<!-- ===================================== -->
+
+<section class="card">
+
+<h2>
+
+📝 Order Notes
+
+</h2>
+
+<label>
+
+Upload Customer Images
+
+</label>
+
+<input
+type="file"
+id="customerImages"
+multiple>
+
+<label>
+
+Upload Mock-ups
+
+</label>
+
+<input
+type="file"
+id="mockupImages"
+multiple>
+
+<label>
+
+Notes
+
+</label>
+
+<textarea
+id="orderNotes"
+placeholder="Anything the customer has requested..."></textarea>
+
+</section>
+
+<!-- ===================================== -->
+<!-- PAYMENT -->
+<!-- ===================================== -->
+
+<section class="card">
+
+<h2>
+
+💷 Payment
+
+</h2>
+
+<label>
+
+Order Total (£)
+
+</label>
+
+<input
+id="orderTotal"
+type="number"
+value="0.00"
+readonly>
+
+<label>
+
+Payment Status
+
+</label>
+
+<input
+id="paymentStatus"
+type="text"
+value="Not Paid"
+readonly>
+
+<label>
+
+Total Paid (£)
+
+</label>
+
+<input
+id="totalPaid"
+type="number"
+value="0.00"
+readonly>
+
+<label>
+
+Remaining Balance (£)
+
+</label>
+
+<input
+id="remainingBalance"
+type="number"
+value="0.00"
+readonly>
+
+<h3>
+
+📜 Payment History
+
+</h3>
+
+<div id="paymentHistory">
+
+<p>No payments recorded yet.</p>
+
+</div>
+
+<button
+type="button"
+id="addPaymentButton">
+
+➕ Add Payment
+
+</button>
+
+</section>
+
+<!-- ===================================== -->
+<!-- SAVE ORDER -->
+<!-- ===================================== -->
+
+<section class="card">
+
+<button
+type="button"
+id="saveOrderButton">
+
+💗 Save Order
+
+</button>
+
+</section>
+
+</div>
+
+<script src="js/create-order.js"></script>
+
+</body>
+
+</html>
