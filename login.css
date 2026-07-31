@@ -1,0 +1,282 @@
+/* ======================================
+   ME TO YOU BUSINESS SUITE
+   LOGIN PAGE
+====================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:linear-gradient(180deg,#fffdfd,#fdeff5);
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+
+/* BACKGROUND */
+
+.background{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    radial-gradient(circle at top left,#ffffff 0%,transparent 40%),
+    radial-gradient(circle at bottom right,#ffe6f1 0%,transparent 45%),
+    radial-gradient(circle at center,#fff7fb 0%,#fdeff5 100%);
+
+}
+
+
+/* MAIN */
+
+.loginWrapper{
+
+    position:relative;
+
+    z-index:10;
+
+    width:100%;
+
+    max-width:430px;
+
+    padding:20px;
+
+    text-align:center;
+
+}
+
+
+/* LOGO */
+
+.logo{
+
+    width:140px;
+
+    margin-bottom:15px;
+
+    animation:floatLogo 5s ease-in-out infinite;
+
+}
+
+
+/* TITLE */
+
+.title{
+
+    font-family:'Great Vibes',cursive;
+
+    font-size:56px;
+
+    color:#8b6475;
+
+    margin-bottom:8px;
+
+}
+
+.heart{
+
+    color:#d59db5;
+
+    font-size:26px;
+
+    margin-bottom:8px;
+
+}
+
+.subtitle{
+
+    color:#80616d;
+
+    font-size:18px;
+
+    margin-bottom:28px;
+
+}
+
+
+/* CARD */
+
+.loginCard{
+
+    background:rgba(255,255,255,.78);
+
+    backdrop-filter:blur(16px);
+
+    border-radius:28px;
+
+    padding:35px 25px;
+
+    box-shadow:0 18px 45px rgba(212,170,187,.25);
+
+}
+
+.loginCard h2{
+
+    color:#73505e;
+
+    margin-bottom:10px;
+
+    font-size:28px;
+
+}
+
+.loginCard p{
+
+    color:#8b6b78;
+
+    margin-bottom:22px;
+
+}
+
+
+/* INPUT */
+
+input{
+
+    width:100%;
+
+    padding:16px;
+
+    border-radius:16px;
+
+    border:2px solid #efd4df;
+
+    outline:none;
+
+    font-size:16px;
+
+    margin-bottom:18px;
+
+    transition:.25s;
+
+}
+
+input:focus{
+
+    border-color:#d59db5;
+
+}
+
+
+/* BUTTON */
+
+button{
+
+    width:100%;
+
+    border:none;
+
+    border-radius:18px;
+
+    padding:16px;
+
+    background:linear-gradient(135deg,#f7bfd2,#dc97b1);
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+button:hover{
+
+    transform:translateY(-2px);
+
+}
+
+
+/* ERROR */
+
+.errorMessage{
+
+    display:none;
+
+    color:#d54876;
+
+    font-size:14px;
+
+    margin-bottom:18px;
+
+}
+
+
+/* FOOTER */
+
+.version{
+
+    margin-top:25px;
+
+    color:#8b6b78;
+
+    font-size:14px;
+
+}
+
+
+/* ANIMATION */
+
+@keyframes floatLogo{
+
+    0%,100%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-8px);
+
+    }
+
+}
+
+
+/* MOBILE */
+
+@media(max-width:480px){
+
+    .title{
+
+        font-size:48px;
+
+    }
+
+    .logo{
+
+        width:120px;
+
+    }
+
+    .loginCard{
+
+        padding:28px 20px;
+
+    }
+
+}
