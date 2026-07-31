@@ -223,3 +223,131 @@ function deleteJob(index){
     saveJobs();
 
 }
+
+// ======================================
+// NOTES
+// ======================================
+
+const notesList =
+document.getElementById("notesList");
+
+const addNoteButton =
+document.getElementById("addNoteButton");
+
+if(addNoteButton){
+
+    addNoteButton.addEventListener("click",addNote);
+
+}
+
+loadNotes();
+
+function addNote(){
+
+    const note =
+    prompt("Add note");
+
+    if(!note) return;
+
+    notes.push(note);
+
+    saveNotes();
+
+}
+
+function saveNotes(){
+
+    localStorage.setItem(
+        "notes",
+        JSON.stringify(notes)
+    );
+
+    loadNotes();
+
+}
+
+function loadNotes(){
+
+    if(!notesList) return;
+
+    notesList.innerHTML = "";
+
+    notes.forEach((note,index)=>{
+
+        const li =
+        document.createElement("li");
+
+        li.innerHTML = `
+
+<span>${note}</span>
+
+<div>
+
+<button
+class="editButton">
+
+✏️
+
+</button>
+
+<button
+class="deleteButton">
+
+🗑️
+
+</button>
+
+</div>
+
+`;
+
+        li.querySelector(".editButton")
+        .addEventListener("click",()=>{
+
+            editNote(index);
+
+        });
+
+        li.querySelector(".deleteButton")
+        .addEventListener("click",()=>{
+
+            deleteNote(index);
+
+        });
+
+        notesList.appendChild(li);
+
+    });
+
+}
+
+function editNote(index){
+
+    const updated =
+    prompt("Edit note",notes[index]);
+
+    if(updated===null) return;
+
+    if(updated.trim()===""){
+
+        deleteNote(index);
+
+        return;
+
+    }
+
+    notes[index]=updated;
+
+    saveNotes();
+
+}
+
+function deleteNote(index){
+
+    if(!confirm("Delete this note?")) return;
+
+    notes.splice(index,1);
+
+    saveNotes();
+
+}
