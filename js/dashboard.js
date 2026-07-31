@@ -218,19 +218,68 @@ function loadJobs(){
 
     if(!jobsList) return;
 
-    jobsList.innerHTML="";
+    jobsList.innerHTML = "";
 
     jobs.forEach((job,index)=>{
 
-        jobsList.innerHTML +=
+        jobsList.innerHTML += `
 
-        `<li>
+<li>
 
-        ${job}
+<span>${job}</span>
 
-        </li>`;
+<div>
+
+<button
+class="completeButton"
+onclick="completeJob(${index})">
+
+✅
+
+</button>
+
+<button
+class="deleteButton"
+onclick="deleteJob(${index})">
+
+🗑️
+
+</button>
+
+</div>
+
+</li>
+
+`;
 
     });
+
+}
+function completeJob(index){
+
+    jobs.splice(index,1);
+
+    localStorage.setItem(
+        "todayJobs",
+        JSON.stringify(jobs)
+    );
+
+    loadJobs();
+
+}
+
+function deleteJob(index){
+
+    if(!confirm("Delete this job?")) return;
+
+    jobs.splice(index,1);
+
+    localStorage.setItem(
+        "todayJobs",
+        JSON.stringify(jobs)
+    );
+
+    loadJobs();
 
 }
 
