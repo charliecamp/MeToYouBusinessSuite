@@ -563,3 +563,28 @@ li{
     }
 
 }
+.completeButton,
+.deleteButton{
+
+    border:none;
+
+    background:none;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    margin-left:8px;
+
+    color:#d47fa2;
+
+    transition:.2s;
+
+}
+
+.completeButton:hover,
+.deleteButton:hover{
+
+    transform:scale(1.15);
+
+}
