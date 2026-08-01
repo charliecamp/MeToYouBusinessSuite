@@ -5,10 +5,6 @@ import {
     getDocs
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
-// =====================================
-// ORDERS
-// =====================================
-
 const ordersContainer =
 document.getElementById("ordersContainer");
 
@@ -18,11 +14,6 @@ document.getElementById("searchOrders");
 let allOrders = [];
 
 loadOrders();
-
-searchBox.addEventListener(
-    "input",
-    filterOrders
-);
 
 async function loadOrders(){
 
@@ -79,22 +70,16 @@ function displayOrders(orders){
 
     ordersContainer.innerHTML = "";
 
-    if(orders.length===0){
+    if(orders.length === 0){
 
         ordersContainer.innerHTML = `
-
-        <div class="emptyState">
-
-            <h2>No Orders Yet</h2>
-
-            <p>Your saved orders will appear here.</p>
-
-        </div>
-
+            <div class="emptyState">
+                <h2>No Orders Yet</h2>
+                <p>Your saved orders will appear here.</p>
+            </div>
         `;
 
         return;
-
     }
 
     orders.forEach(order=>{
@@ -112,49 +97,32 @@ function displayOrders(orders){
 
 <p>📞 ${order.customerContact || ""}</p>
 
-<p>📅 ${order.dateNeeded || "No Date"}</p>
+<p>📅 Needed By: ${order.dateNeeded || "No Date"}</p>
 
-<p>
-💷 £${
+<p>💷 Total: <strong>£${Number(order.orderTotal || 0).toFixed(2)}</strong></p>
 
-// =====================================
-// SEARCH
-// =====================================
+<p>💰 Paid: £${Number(order.totalPaid || 0).toFixed(2)}</p>
 
-function filterOrders(){
+<p>❤️ Remaining: £${Number(order.remainingBalance || 0).toFixed(2)}</p>
 
-    const search =
-    searchBox.value
-    .toLowerCase()
-    .trim();
+<p>🚚 ${order.deliveryMethod || "Collection"}</p>
 
-    if(search===""){
+<p>✨ ${order.orderStatus || "New Order"}</p>
 
-        displayOrders(allOrders);
+<p>💳 ${order.paymentStatus || "Not Paid"}</p>
 
-        return;
+`;
 
-    }
+        card.addEventListener("click",()=>{
 
-    const filtered =
-    allOrders.filter(order=>{
+            window.location.href =
+            `view-order.html?id=${order.id}`;
 
-        return (
+        });
 
-            (order.customerName || "")
-            .toLowerCase()
-            .includes(search)
-
-            ||
-
-            (order.orderNumber || "")
-            .toLowerCase()
-            .includes(search)
-
-        );
+        ordersContainer.appendChild(card);
 
     });
 
-    displayOrders(filtered);
-
 }
+
