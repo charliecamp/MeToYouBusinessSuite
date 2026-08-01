@@ -1,85 +1,64 @@
-// ======================================
-// Me To You Business Suite
-// Login
-// ======================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+signOut
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
-const APP_PASSWORD = "Maisie.06";
+const firebaseConfig = {
+apiKey: "AIzaSyCO6e9VWwPV17lt7FKK052hlEdy-lmsOqk",
+authDomain: "metoyoubusinesssuite.firebaseapp.com",
+projectId: "metoyoubusinesssuite",
+storageBucket: "metoyoubusinesssuite.firebasestorage.app",
+messagingSenderId: "591235577638",
+appId: "1:591235577638:web:1dec8dcfc23b2573f533e7"
+};
 
-// If already logged in
-if (sessionStorage.getItem("loggedIn") === "true") {
+const app = initializeApp(firebaseConfig);
 
-    window.location.href = "dashboard.html";
+const auth = getAuth(app);
 
-}
+const provider = new GoogleAuthProvider();
 
-// ----------------------
-// LOGIN
-// ----------------------
+const loginButton =
+document.getElementById("googleLoginButton");
 
-function login() {
+const loginMessage =
+document.getElementById("loginMessage");
 
-    const password =
-        document.getElementById("password").value.trim();
+loginButton.addEventListener("click", async ()=>{
 
-    if (password === APP_PASSWORD) {
+try{
 
-        sessionStorage.setItem(
-            "loggedIn",
-            "true"
-        );
+const result =
+await signInWithPopup(auth,provider);
 
-        window.location.href =
-            "dashboard.html";
+const user =
+result.user;
 
-    }
+if(
+user.email ===
+"metoyoudesigns@outlook.com"
+){
 
-    else {
+window.location.href =
+"dashboard.html";
 
-        alert("Incorrect password.");
+}else{
 
-        document.getElementById("password").value = "";
+await signOut(auth);
 
-        document.getElementById("password").focus();
-
-    }
-
-}
-
-// ----------------------
-// SHOW PASSWORD
-// ----------------------
-
-function togglePassword() {
-
-    const input =
-        document.getElementById("password");
-
-    if (input.type === "password") {
-
-        input.type = "text";
-
-    }
-
-    else {
-
-        input.type = "password";
-
-    }
+loginMessage.innerHTML =
+"Access denied.";
 
 }
 
-// ----------------------
-// ENTER KEY
-// ----------------------
+}catch(error){
 
-document
-.getElementById("password")
-.addEventListener("keydown", function(e){
+loginMessage.innerHTML =
+error.message;
 
-    if(e.key === "Enter"){
-
-        login();
-
-    }
+}
 
 });
