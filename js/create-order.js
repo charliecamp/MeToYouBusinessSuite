@@ -385,3 +385,115 @@ function updatePayments(){
     }
 
 }
+
+// =====================================
+// SAVE ORDER
+// =====================================
+
+saveOrderButton.addEventListener("click", saveOrder);
+
+async function saveOrder() {
+
+    const items = [];
+
+    document.querySelectorAll(".itemCard").forEach(card => {
+
+        items.push({
+
+            product: card.querySelector(".itemProduct").value,
+
+            quantity: Number(card.querySelector(".itemQuantity").value),
+
+            unitPrice: Number(card.querySelector(".itemPrice").value),
+
+            itemTotal: Number(card.querySelector(".itemTotal").value),
+
+            size: card.querySelector(".itemSize").value,
+
+            colour: card.querySelector(".itemColour").value,
+
+            personalised: card.querySelector(".itemPersonalised").value,
+
+            personalisation: card.querySelector(".itemPersonalisation").value
+
+        });
+
+    });
+
+    const order = {
+
+        orderNumber: orderNumber.value,
+
+        customerName: customerName.value,
+
+        customerContact: customerContact.value,
+
+        orderSource: orderSource.value,
+
+        socialUsername: socialUsername.value,
+
+        orderDate: orderDate.value,
+
+        dateNeeded: dateNeeded.value,
+
+        orderNotes: orderNotes.value,
+
+        orderTotal: Number(orderTotal.value),
+
+        paymentStatus: paymentStatus.value,
+
+        totalPaid: Number(totalPaid.value),
+
+        remainingBalance: Number(remainingBalance.value),
+
+        deliveryMethod: deliveryMethod.value,
+
+        address1: address1.value,
+
+        address2: address2.value,
+
+        town: town.value,
+
+        county: county.value,
+
+        postcode: postcode.value,
+
+        orderStatus: orderStatus.value,
+
+        items: items,
+
+        payments: payments,
+
+        createdAt: serverTimestamp()
+
+    };
+
+    try {
+
+        await addDoc(
+            collection(db, "orders"),
+            order
+        );
+
+        nextOrderNumber++;
+
+        localStorage.setItem(
+            "nextOrderNumber",
+            nextOrderNumber
+        );
+
+        alert("✅ Order saved successfully!");
+
+        window.location.href = "orders.html";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert("❌ Error saving order.");
+
+    }
+
+}
