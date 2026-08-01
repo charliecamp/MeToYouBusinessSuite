@@ -1,72 +1,113 @@
-"use strict";
+<!DOCTYPE html>
+<html lang="en">
 
-// ======================================
-// CREATE ORDER
-// ======================================
+<head>
 
-let orders = JSON.parse(
-localStorage.getItem("orders")
-) || [];
+<meta charset="UTF-8">
 
-let payments = [];
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-let nextOrderNumber = Number(
-localStorage.getItem("nextOrderNumber")
-) || 1;
+<title>Create New Order | Me To You Designs</title>
 
-const orderNumber =
-document.getElementById("orderNumber");
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-const orderDate =
-document.getElementById("orderDate");
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
-const itemsContainer =
-document.getElementById("itemsContainer");
+<link rel="stylesheet" href="css/create-order.css">
 
-const addItemButton =
-document.getElementById("addItemButton");
+</head>
 
-const saveOrderButton =
-document.getElementById("saveOrderButton");
+<body>
 
-if(orderNumber){
+<div class="page">
 
-orderNumber.value =
-"MTYD-" +
-String(nextOrderNumber).padStart(4,"0");
+<header class="order-header">
 
-}
+<button
+type="button"
+class="back-button"
+onclick="location.href='dashboard.html'">
 
-if(orderDate){
+←
 
-orderDate.value =
-new Date().toISOString().split("T")[0];
+</button>
 
-}
+<img
+src="logo.PNG"
+class="logo"
+alt="Me To You Designs">
 
-console.log("Create Order Loaded");
+<h1>Create New Order</h1>
 
-// ======================================
-// ITEMS
-// ======================================
+<div class="heart">
 
-addItemButton.addEventListener("click", addItem);
+♡
 
-function addItem(){
+</div>
 
-const item =
-document.createElement("div");
+<p>
 
-item.className = "itemCard";
+Complete the form below to create a new customer order.
 
-item.innerHTML = `
+</p>
+
+</header>
+
+<section class="card">
+
+<h2>👤 Customer Details</h2>
+
+<label>Customer Name</label>
+
+<input
+id="customerName"
+type="text"
+placeholder="Customer name">
+
+<label>Customer Contact</label>
+
+<input
+id="customerContact"
+type="text"
+placeholder="Phone number or email">
+
+<label>Where Ordered From</label>
+
+<select id="orderSource">
+
+<option>Facebook</option>
+<option>Instagram</option>
+<option>Snapchat</option>
+<option>TikTok</option>
+<option>Website</option>
+<option>Other</option>
+
+</select>
+
+<label>Social Username</label>
+
+<input
+id="socialUsername"
+type="text"
+placeholder="@username">
+
+</section>
+
+<section class="card">
+
+<h2>📦 Items Ordered</h2>
+
+<div id="itemsContainer">
+
+<div class="itemCard">
 
 <label>Product</label>
 
 <input
 type="text"
 class="itemProduct"
-placeholder="Example: Balloon Arch">
+placeholder="Example: Balloon Stack">
 
 <label>Quantity</label>
 
@@ -102,7 +143,8 @@ class="itemSize">
 
 <input
 type="text"
-class="itemColour">
+class="itemColour"
+placeholder="Pink, Bluey, Football...">
 
 <label>Personalised?</label>
 
@@ -113,12 +155,13 @@ class="itemColour">
 
 </select>
 
-<div class="personalisationBox" style="display:none;">
+<div class="personalisationBox">
 
 <label>Personalisation</label>
 
 <textarea
-class="itemPersonalisation"></textarea>
+class="itemPersonalisation"
+placeholder="Name, wording or message..."></textarea>
 
 </div>
 
@@ -126,101 +169,303 @@ class="itemPersonalisation"></textarea>
 type="button"
 class="removeItemButton">
 
-❌ Remove Item
+🗑 Remove Item
 
 </button>
 
-`;
+</div>
 
-itemsContainer.appendChild(item);
+</div>
 
-setupItem(item);
+<button
+type="button"
+id="addItemButton">
 
-}
+➕ Add Another Item
 
-document
-.querySelectorAll(".itemCard")
-.forEach(setupItem);
+</button>
 
-function setupItem(item){
+</section>
 
-const qty =
-item.querySelector(".itemQuantity");
+<section class="card">
 
-const price =
-item.querySelector(".itemPrice");
+<h2>📝 Order Details</h2>
 
-const total =
-item.querySelector(".itemTotal");
+<label>Order Number</label>
 
-const personalised =
-item.querySelector(".itemPersonalised");
+<input
+id="orderNumber"
+type="text"
+readonly>
 
-const personalisationBox =
-item.querySelector(".personalisationBox");
+<label>Order Date</label>
 
-function updateItem(){
+<input
+id="orderDate"
+type="date">
 
-const value =
-(Number(qty.value)||0) *
-(Number(price.value)||0);
+<label>Date Needed By</label>
 
-total.value =
-value.toFixed(2);
+<input
+id="dateNeeded"
+type="date">
 
-updateOrderTotal();
+<label>Upload Customer Images</label>
 
-}
+<input
+id="customerImages"
+type="file"
+multiple>
 
-qty.addEventListener("input",updateItem);
+<label>Upload Mock Ups</label>
 
-price.addEventListener("input",updateItem);
+<input
+id="mockupImages"
+type="file"
+multiple>
 
-personalised.addEventListener("change",()=>{
+<label>Order Notes</label>
 
-personalisationBox.style.display =
-personalised.value==="Yes"
-? "block"
-: "none";
+<textarea
+id="orderNotes"
+placeholder="Anything the customer has requested..."></textarea>
 
-});
+</section>
 
-item
-.querySelector(".removeItemButton")
-.addEventListener("click",()=>{
+<section class="card">
 
-if(document.querySelectorAll(".itemCard").length===1){
+<h2>💷 Payment</h2>
 
-alert("At least one item is required.");
+<label>Order Total (£)</label>
 
-return;
+<input
+id="orderTotal"
+type="number"
+value="0.00"
+readonly>
 
-}
+<label>Payment Status</label>
 
-item.remove();
+<input
+id="paymentStatus"
+type="text"
+value="Not Paid"
+readonly>
 
-updateOrderTotal();
+<label>Total Paid (£)</label>
 
-});
+<input
+id="totalPaid"
+type="number"
+value="0.00"
+readonly>
 
-updateItem();
+<label>Remaining Balance (£)</label>
 
-}
+<input
+id="remainingBalance"
+type="number"
+value="0.00"
+readonly>
 
-function updateOrderTotal(){
+<h3>📜 Payment History</h3>
 
-let total = 0;
+<div id="paymentHistory">
 
-document
-.querySelectorAll(".itemTotal")
-.forEach(item=>{
+<p>No payments recorded yet.</p>
 
-total += Number(item.value);
+</div>
 
-});
+<label>Payment Date</label>
 
-document.getElementById("orderTotal").value =
-total.toFixed(2);
+<input
+id="paymentDate"
+type="date">
 
-}
+<label>Amount (£)</label>
 
+<input
+id="paymentAmount"
+type="number"
+step="0.01"
+placeholder="0.00">
+
+<label>Payment Method</label>
+
+<select id="paymentMethod">
+
+<option>Cash</option>
+<option>Bank Transfer</option>
+<option>Card</option>
+<option>PayPal</option>
+<option>Other</option>
+
+</select>
+
+<label>Payment Notes</label>
+
+<textarea
+id="paymentNotes"
+placeholder="Deposit, final payment, etc."></textarea>
+
+<button
+type="button"
+id="savePaymentButton">
+
+💗 Save Payment
+
+</button>
+
+</section>
+
+<section class="card">
+
+<h2>🚚 Collection / Delivery</h2>
+
+<label>Delivery Method</label>
+
+<select id="deliveryMethod">
+
+<option>Collection</option>
+
+<option>Local Delivery</option>
+
+<option>Royal Mail</option>
+
+<option>Evri</option>
+
+<option>InPost</option>
+
+</select>
+
+<div id="addressSection">
+
+<label>Address Line 1</label>
+
+<input
+id="address1"
+type="text">
+
+<label>Address Line 2</label>
+
+<input
+id="address2"
+type="text">
+
+<label>Town / City</label>
+
+<input
+id="town"
+type="text">
+
+<label>County</label>
+
+<input
+id="county"
+type="text">
+
+<label>Postcode</label>
+
+<input
+id="postcode"
+type="text">
+
+</div>
+
+</section>
+
+<section class="card">
+
+<h2>✨ Order Progress</h2>
+
+<label>Order Status</label>
+
+<select id="orderStatus">
+
+<option>New Order</option>
+
+<option>Designing</option>
+
+<option>Making</option>
+
+<option>Ready</option>
+
+<option>Completed</option>
+
+</select>
+
+<div class="progressIcons">
+
+<div>
+
+📝
+
+<br>
+
+New
+
+</div>
+
+<div>
+
+🎨
+
+<br>
+
+Designing
+
+</div>
+
+<div>
+
+🛠
+
+<br>
+
+Making
+
+</div>
+
+<div>
+
+📦
+
+<br>
+
+Ready
+
+</div>
+
+<div>
+
+✅
+
+<br>
+
+Completed
+
+</div>
+
+</div>
+
+</section>
+
+<section class="card">
+
+<button
+type="button"
+id="saveOrderButton">
+
+💗 Save Order
+
+</button>
+
+</section>
+
+</div>
+
+<script src="js/create-order.js"></script>
+
+</body>
+
+</html>
