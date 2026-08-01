@@ -167,3 +167,45 @@ grandTotal.toFixed(2);
 
 }
 
+// ==========================
+// DELIVERY OPTIONS
+// ==========================
+
+const deliveryMethod = document.getElementById("deliveryMethod");
+const addressSection = document.getElementById("addressSection");
+const trackingLabel = document.getElementById("trackingLabel");
+const trackingNumber = document.getElementById("trackingNumber");
+
+function updateDeliveryFields() {
+
+    const method = deliveryMethod.value;
+
+    if (method === "Collection") {
+
+        addressSection.style.display = "none";
+        trackingLabel.style.display = "none";
+        trackingNumber.style.display = "none";
+
+    }
+
+    else if (method === "Local Delivery") {
+
+        addressSection.style.display = "block";
+        trackingLabel.style.display = "none";
+        trackingNumber.style.display = "none";
+
+    }
+
+    else {
+
+        addressSection.style.display = "block";
+        trackingLabel.style.display = "block";
+        trackingNumber.style.display = "block";
+
+    }
+
+}
+
+deliveryMethod.addEventListener("change", updateDeliveryFields);
+
+updateDeliveryFields();
