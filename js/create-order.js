@@ -78,3 +78,167 @@ function initialisePage(){
 }
 
 initialisePage();
+
+// =====================================
+// ITEMS
+// =====================================
+
+document
+.querySelectorAll(".itemCard")
+.forEach(setupItem);
+
+addItemButton.addEventListener(
+"click",
+addNewItem
+);
+
+function addNewItem(){
+
+    const firstCard =
+    document.querySelector(".itemCard");
+
+    const newCard =
+    firstCard.cloneNode(true);
+
+    newCard.querySelector(".itemProduct").value = "";
+
+    newCard.querySelector(".itemQuantity").value = 1;
+
+    newCard.querySelector(".itemPrice").value = "0.00";
+
+    newCard.querySelector(".itemTotal").value = "0.00";
+
+    newCard.querySelector(".itemSize").value = "";
+
+    newCard.querySelector(".itemColour").value = "";
+
+    newCard.querySelector(".itemPersonalised").value = "No";
+
+    newCard.querySelector(".itemPersonalisation").value = "";
+
+    newCard.querySelector(".personalisationBox").style.display = "none";
+
+    itemsContainer.appendChild(newCard);
+
+    setupItem(newCard);
+
+    calculateTotal();
+
+}
+
+function setupItem(card){
+
+    const qty =
+    card.querySelector(".itemQuantity");
+
+    const price =
+    card.querySelector(".itemPrice");
+
+    const personalised =
+    card.querySelector(".itemPersonalised");
+
+    const personalisationBox =
+    card.querySelector(".personalisationBox");
+
+    qty.addEventListener(
+        "input",
+        calculateTotal
+    );
+
+    price.addEventListener(
+        "input",
+        calculateTotal
+    );
+
+    personalised.addEventListener(
+        "change",
+        function(){
+
+            if(personalised.value==="Yes"){
+
+                personalisationBox.style.display="block";
+
+            }
+
+            else{
+
+                personalisationBox.style.display="none";
+
+            }
+
+        }
+    );
+
+    card
+    .querySelector(".removeItemButton")
+    .addEventListener("click",function(){
+
+        if(document.querySelectorAll(".itemCard").length===1){
+
+            alert("You must have at least one item.");
+
+            return;
+
+        }
+
+        card.remove();
+
+        calculateTotal();
+
+    });
+
+}
+
+// =====================================
+
+// TOTALS
+
+// =====================================
+
+function calculateTotal(){
+
+    let grandTotal = 0;
+
+    document
+
+    .querySelectorAll(".itemCard")
+
+    .forEach(card=>{
+
+        const qty =
+
+        Number(card.querySelector(".itemQuantity").value)||0;
+
+        const price =
+
+        Number(card.querySelector(".itemPrice").value)||0;
+
+        const total =
+
+        qty*price;
+
+        card.querySelector(".itemTotal").value =
+
+        total.toFixed(2);
+
+        grandTotal += total;
+
+    });
+
+    orderTotal.value =
+
+    grandTotal.toFixed(2);
+
+    remainingBalance.value =
+
+    (
+
+        grandTotal -
+
+        Number(totalPaid.value)
+
+    ).toFixed(2);
+
+}
+
+calculateTotal();
