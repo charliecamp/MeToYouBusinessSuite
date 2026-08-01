@@ -484,7 +484,7 @@ async function saveOrder() {
 
         alert("✅ Order saved successfully!");
 
-        window.location.href = "orders.html";
+        window.location.href = "dashboard.html";
 
     }
 
