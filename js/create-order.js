@@ -1,3 +1,10 @@
+import { db } from "./firebase.js";
+
+import {
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+
 "use strict";
 
 // =====================================
@@ -232,5 +239,124 @@ addPaymentButton.style.display="none";
 }
 
 });
+
+}
+
+// =====================================
+// SAVE ORDER
+// =====================================
+
+const saveOrderButton =
+document.getElementById("saveOrderButton");
+
+saveOrderButton.addEventListener("click", saveOrder);
+
+async function saveOrder() {
+
+    const order = {
+
+        orderNumber: document.getElementById("orderNumber").value,
+
+        customerName: document.getElementById("customerName").value,
+
+        customerContact: document.getElementById("customerContact").value,
+
+        orderSource: document.getElementById("orderSource").value,
+
+        socialUsername: document.getElementById("socialUsername").value,
+
+        orderDate: document.getElementById("orderDate").value,
+
+        dateNeeded: document.getElementById("dateNeeded").value,
+
+        orderNotes: document.getElementById("orderNotes").value,
+
+        orderTotal: Number(document.getElementById("orderTotal").value),
+
+        paymentStatus: document.getElementById("paymentStatus").value,
+
+        totalPaid: Number(document.getElementById("totalPaid").value),
+
+        remainingBalance: Number(document.getElementById("remainingBalance").value),
+
+        deliveryMethod: document.getElementById("deliveryMethod").value,
+
+        address1: document.getElementById("address1").value,
+
+        address2: document.getElementById("address2").value,
+
+        town: document.getElementById("town").value,
+
+        county: document.getElementById("county").value,
+
+        postcode: document.getElementById("postcode").value,
+
+        orderStatus: document.getElementById("orderStatus").value,
+
+        items: [],
+
+        payments: payments
+
+        document
+    .querySelectorAll(".itemCard")
+    .forEach(card=>{
+
+        order.items.push({
+
+            product:
+            card.querySelector(".itemProduct").value,
+
+            quantity:
+            Number(
+                card.querySelector(".itemQuantity").value
+            ),
+
+            unitPrice:
+            Number(
+                card.querySelector(".itemPrice").value
+            ),
+
+            itemTotal:
+            Number(
+                card.querySelector(".itemTotal").value
+            ),
+
+            size:
+            card.querySelector(".itemSize").value,
+
+            colour:
+            card.querySelector(".itemColour").value,
+
+            personalised:
+            card.querySelector(".itemPersonalised").value,
+
+            personalisation:
+            card.querySelector(".itemPersonalisation").value
+
+        });
+
+    });
+
+    console.log(order);
+        try {
+
+        await addDoc(
+            collection(db, "orders"),
+            order
+        );
+
+        alert("✅ Order saved successfully!");
+
+        window.location.href = "orders.html";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert("❌ Error saving order.");
+
+    }
 
 }
