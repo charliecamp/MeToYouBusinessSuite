@@ -490,10 +490,10 @@ async function saveOrder() {
 
     catch (error) {
 
-        console.error(error);
+    console.error(error);
 
-        alert("❌ Error saving order.");
+    alert(error.message);
 
-    }
+}
 
 }
