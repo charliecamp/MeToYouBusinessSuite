@@ -65,25 +65,49 @@ async function loadOrders(){
 
             card.className="orderCard";
 
-            card.innerHTML=`
+       card.innerHTML = `
 
-                <h2>${order.orderNumber}</h2>
+<h2>❤️ ${order.orderNumber || "No Order Number"}</h2>
 
-                <h3>${order.customerName}</h3>
+<h3>👤 ${order.customerName || "No Customer Name"}</h3>
 
-                <p>
-                ${order.orderStatus}
-                </p>
+<p>
+📞 ${order.customerContact || "No Contact"}
+</p>
 
-                <p>
-                £${Number(order.orderTotal).toFixed(2)}
-                </p>
+<p>
+📅 Needed By:
+${order.dateNeeded || "Not Set"}
+</p>
 
-                <p>
-                ${order.paymentStatus}
-                </p>
+<p>
+💷 Total:
+<strong>£${Number(order.orderTotal || 0).toFixed(2)}</strong>
+</p>
 
-            `;
+<p>
+💰 Paid:
+£${Number(order.totalPaid || 0).toFixed(2)}
+</p>
+
+<p>
+❤️ Remaining:
+£${Number(order.remainingBalance || 0).toFixed(2)}
+</p>
+
+<p>
+🚚 ${order.deliveryMethod || "Collection"}
+</p>
+
+<p>
+✨ ${order.orderStatus || "New Order"}
+</p>
+
+<p>
+💳 ${order.paymentStatus || "Not Paid"}
+</p>
+
+`;
 
             card.addEventListener("click",()=>{
 
