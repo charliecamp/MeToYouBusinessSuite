@@ -33,7 +33,7 @@ href="css/view-order.css">
 
 <button
 class="backButton"
-onclick="history.back()">
+onclick="location.href='orders.html'">
 
 ←
 
@@ -49,29 +49,123 @@ View Order
 
 </h1>
 
-<p>
-
-Manage this customer order.
-
-</p>
-
 </header>
 
-<div
-id="orderContainer">
+<section class="heroCard">
 
-Loading Order...
+<h2 id="orderNumber">
+
+Loading...
+
+</h2>
+
+<h3 id="customerName">
+
+Loading Customer...
+
+</h3>
+
+<div class="heroInfo">
+
+<div>
+
+💷
+
+<br>
+
+<span id="orderTotal">
+
+£0.00
+
+</span>
+
+</div>
+
+<div>
+
+💳
+
+<br>
+
+<span id="paymentStatus">
+
+Not Paid
+
+</span>
 
 </div>
 
 </div>
 
-<script
-type="module"
-src="js/view-order.js">
+</section>
 
-</script>
+<section class="accordion">
 
-</body>
+<button class="accordionButton">
 
-</html>
+👤 Customer Details
+
+</button>
+
+<div class="accordionContent"
+id="customerSection">
+
+</div>
+
+</section>
+
+<section class="accordion">
+
+<button class="accordionButton">
+
+📦 Order Items
+
+</button>
+
+<div class="accordionContent"
+id="itemsSection">
+
+</div>
+
+</section>
+
+<section class="accordion">
+
+<button class="accordionButton">
+
+💳 Payments
+
+</button>
+
+<div class="accordionContent"
+id="paymentsSection">
+
+</div>
+
+</section>
+
+<section class="accordion">
+
+<button class="accordionButton">
+
+🚚 Delivery
+
+</button>
+
+<div class="accordionContent"
+id="deliverySection">
+
+</div>
+
+</section>
+
+<section class="accordion">
+
+<button class="accordionButton">
+
+📸 Images
+
+</button>
+
+<div class="accordion
+  
