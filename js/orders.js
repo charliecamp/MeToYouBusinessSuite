@@ -2,9 +2,7 @@ import { db } from "./firebase.js";
 
 import {
     collection,
-    getDocs,
-    query,
-    orderBy
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
 // =====================================
@@ -14,7 +12,17 @@ import {
 const ordersContainer =
 document.getElementById("ordersContainer");
 
+const searchBox =
+document.getElementById("searchOrders");
+
+let allOrders = [];
+
 loadOrders();
+
+searchBox.addEventListener(
+    "input",
+    filterOrders
+);
 
 async function loadOrders(){
 
@@ -26,101 +34,26 @@ async function loadOrders(){
 
     try{
 
-        const q =
-        query(
-            collection(db,"orders"),
-            orderBy("createdAt","desc")
+        const snapshot =
+        await getDocs(
+            collection(db,"orders")
         );
 
-        const snapshot =
-        await getDocs(q);
-
-        ordersContainer.innerHTML="";
-
-        if(snapshot.empty){
-
-            ordersContainer.innerHTML=`
-                <div class="emptyState">
-
-                    <h2>No Orders Yet</h2>
-
-                    <p>
-                    Your saved orders will appear here.
-                    </p>
-
-                </div>
-            `;
-
-            return;
-
-        }
+        allOrders = [];
 
         snapshot.forEach(doc=>{
 
-            const order =
-            doc.data();
+            allOrders.push({
 
-            const card =
-            document.createElement("div");
+                id: doc.id,
 
-            card.className="orderCard";
-
-       card.innerHTML = `
-
-<h2>❤️ ${order.orderNumber || "No Order Number"}</h2>
-
-<h3>👤 ${order.customerName || "No Customer Name"}</h3>
-
-<p>
-📞 ${order.customerContact || "No Contact"}
-</p>
-
-<p>
-📅 Needed By:
-${order.dateNeeded || "Not Set"}
-</p>
-
-<p>
-💷 Total:
-<strong>£${Number(order.orderTotal || 0).toFixed(2)}</strong>
-</p>
-
-<p>
-💰 Paid:
-£${Number(order.totalPaid || 0).toFixed(2)}
-</p>
-
-<p>
-❤️ Remaining:
-£${Number(order.remainingBalance || 0).toFixed(2)}
-</p>
-
-<p>
-🚚 ${order.deliveryMethod || "Collection"}
-</p>
-
-<p>
-✨ ${order.orderStatus || "New Order"}
-</p>
-
-<p>
-💳 ${order.paymentStatus || "Not Paid"}
-</p>
-
-`;
-
-            card.addEventListener("click", () => {
-
-    window.location.href =
-    `view-order.html?id=${doc.id}`;
-
-});
+                ...doc.data()
 
             });
 
-            ordersContainer.appendChild(card);
-
         });
+
+        displayOrders(allOrders);
 
     }
 
@@ -128,9 +61,9 @@ ${order.dateNeeded || "Not Set"}
 
         console.error(error);
 
-        ordersContainer.innerHTML=`
-            <p>
-            Error loading orders.
+        ordersContainer.innerHTML = `
+            <p style="text-align:center;">
+                Error loading orders.
             </p>
         `;
 
@@ -138,3 +71,90 @@ ${order.dateNeeded || "Not Set"}
 
 }
 
+// =====================================
+// DISPLAY ORDERS
+// =====================================
+
+function displayOrders(orders){
+
+    ordersContainer.innerHTML = "";
+
+    if(orders.length===0){
+
+        ordersContainer.innerHTML = `
+
+        <div class="emptyState">
+
+            <h2>No Orders Yet</h2>
+
+            <p>Your saved orders will appear here.</p>
+
+        </div>
+
+        `;
+
+        return;
+
+    }
+
+    orders.forEach(order=>{
+
+        const card =
+        document.createElement("div");
+
+        card.className = "orderCard";
+
+        card.innerHTML = `
+
+<h2>❤️ ${order.orderNumber || "No Order Number"}</h2>
+
+<h3>👤 ${order.customerName || "No Customer"}</h3>
+
+<p>📞 ${order.customerContact || ""}</p>
+
+<p>📅 ${order.dateNeeded || "No Date"}</p>
+
+<p>
+💷 £${
+
+// =====================================
+// SEARCH
+// =====================================
+
+function filterOrders(){
+
+    const search =
+    searchBox.value
+    .toLowerCase()
+    .trim();
+
+    if(search===""){
+
+        displayOrders(allOrders);
+
+        return;
+
+    }
+
+    const filtered =
+    allOrders.filter(order=>{
+
+        return (
+
+            (order.customerName || "")
+            .toLowerCase()
+            .includes(search)
+
+            ||
+
+            (order.orderNumber || "")
+            .toLowerCase()
+            .includes(search)
+
+        );
+
+    });
+
+    displayOrders(filtered);
+
+}
