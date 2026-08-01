@@ -1,471 +1,162 @@
-<!DOCTYPE html>
-<html lang="en">
+"use strict";
 
-<head>
+// =====================================
+// CREATE ORDER
+// =====================================
 
-<meta charset="UTF-8">
+const orderNumber =
+document.getElementById("orderNumber");
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+const orderDate =
+document.getElementById("orderDate");
 
-<title>Create New Order | Me To You Designs</title>
+const addItemButton =
+document.getElementById("addItemButton");
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+const itemsContainer =
+document.getElementById("itemsContainer");
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+const orderTotal =
+document.getElementById("orderTotal");
 
-<link rel="stylesheet" href="css/create-order.css">
+let nextOrderNumber =
+Number(
+localStorage.getItem("nextOrderNumber")
+) || 1;
 
-</head>
+let payments = [];
 
-<body>
+let orders =
+JSON.parse(
+localStorage.getItem("orders")
+) || [];
 
-<div class="page">
+orderNumber.value =
+"MTYD-" +
+String(nextOrderNumber).padStart(4,"0");
 
-<header class="order-header">
+orderDate.value =
+new Date()
+.toISOString()
+.split("T")[0];
 
-<button
-type="button"
-class="back-button"
-onclick="location.href='dashboard.html'">
+console.log("Create Order Ready");
 
-←
+// =====================================
+// ITEM FUNCTIONS
+// =====================================
 
-</button>
+document
+.querySelectorAll(".itemCard")
+.forEach(setupItem);
 
-<img
-src="logo.PNG"
-class="logo"
-alt="Me To You Designs">
+addItemButton.addEventListener(
+"click",
+createItem
+);
 
-<h1>Create New Order</h1>
+function createItem(){
 
-<div class="heart">
+const firstCard =
+document.querySelector(".itemCard");
 
-♡
+const newCard =
+firstCard.cloneNode(true);
 
-</div>
+newCard.querySelector(".itemProduct").value = "";
+newCard.querySelector(".itemQuantity").value = 1;
+newCard.querySelector(".itemPrice").value = "0.00";
+newCard.querySelector(".itemTotal").value = "0.00";
+newCard.querySelector(".itemSize").value = "";
+newCard.querySelector(".itemColour").value = "";
+newCard.querySelector(".itemPersonalised").value = "No";
+newCard.querySelector(".itemPersonalisation").value = "";
 
-<p>
+newCard.querySelector(".personalisationBox").style.display = "none";
 
-Complete the form below to create a new customer order.
+itemsContainer.appendChild(newCard);
 
-</p>
+setupItem(newCard);
 
-</header>
+updateOrderTotal();
 
-<section class="card">
+}
 
-<h2>👤 Customer Details</h2>
+function setupItem(card){
 
-<label>Customer Name</label>
+const qty =
+card.querySelector(".itemQuantity");
 
-<input
-id="customerName"
-type="text"
-placeholder="Customer name">
+const price =
+card.querySelector(".itemPrice");
 
-<label>Customer Contact</label>
+const total =
+card.querySelector(".itemTotal");
 
-<input
-id="customerContact"
-type="text"
-placeholder="Phone number or email">
+const personalised =
+card.querySelector(".itemPersonalised");
 
-<label>Where Ordered From</label>
+const personalisation =
+card.querySelector(".personalisationBox");
 
-<select id="orderSource">
+qty.oninput = updateOrderTotal;
+price.oninput = updateOrderTotal;
 
-<option>Facebook</option>
-<option>Instagram</option>
-<option>Snapchat</option>
-<option>TikTok</option>
-<option>Website</option>
-<option>Other</option>
+personalised.onchange = function(){
 
-</select>
+personalisation.style.display =
+this.value==="Yes"
+? "block"
+: "none";
 
-<label>Social Username</label>
+};
 
-<input
-id="socialUsername"
-type="text"
-placeholder="@username">
+card
+.querySelector(".removeItemButton")
+.onclick = function(){
 
-</section>
+if(document.querySelectorAll(".itemCard").length===1){
 
-<section class="card">
+alert("At least one item is required.");
 
-<h2>📦 Items Ordered</h2>
+return;
 
-<div id="itemsContainer">
+}
 
-<div class="itemCard">
+card.remove();
 
-<label>Product</label>
+updateOrderTotal();
 
-<input
-type="text"
-class="itemProduct"
-placeholder="Example: Balloon Stack">
+};
 
-<label>Quantity</label>
+}
 
-<input
-type="number"
-class="itemQuantity"
-value="1"
-min="1">
+function updateOrderTotal(){
 
-<label>Unit Price (£)</label>
+let grandTotal = 0;
 
-<input
-type="number"
-class="itemPrice"
-value="0.00"
-step="0.01">
+document
+.querySelectorAll(".itemCard")
+.forEach(card=>{
 
-<label>Item Total (£)</label>
+const qty =
+Number(card.querySelector(".itemQuantity").value)||0;
 
-<input
-type="number"
-class="itemTotal"
-value="0.00"
-readonly>
+const price =
+Number(card.querySelector(".itemPrice").value)||0;
 
-<label>Size (Optional)</label>
+const total =
+qty*price;
 
-<input
-type="text"
-class="itemSize">
+card.querySelector(".itemTotal").value =
+total.toFixed(2);
 
-<label>Colour / Theme</label>
+grandTotal += total;
 
-<input
-type="text"
-class="itemColour"
-placeholder="Pink, Bluey, Football...">
+});
 
-<label>Personalised?</label>
+orderTotal.value =
+grandTotal.toFixed(2);
 
-<select class="itemPersonalised">
+}
 
-<option>No</option>
-<option>Yes</option>
-
-</select>
-
-<div class="personalisationBox">
-
-<label>Personalisation</label>
-
-<textarea
-class="itemPersonalisation"
-placeholder="Name, wording or message..."></textarea>
-
-</div>
-
-<button
-type="button"
-class="removeItemButton">
-
-🗑 Remove Item
-
-</button>
-
-</div>
-
-</div>
-
-<button
-type="button"
-id="addItemButton">
-
-➕ Add Another Item
-
-</button>
-
-</section>
-
-<section class="card">
-
-<h2>📝 Order Details</h2>
-
-<label>Order Number</label>
-
-<input
-id="orderNumber"
-type="text"
-readonly>
-
-<label>Order Date</label>
-
-<input
-id="orderDate"
-type="date">
-
-<label>Date Needed By</label>
-
-<input
-id="dateNeeded"
-type="date">
-
-<label>Upload Customer Images</label>
-
-<input
-id="customerImages"
-type="file"
-multiple>
-
-<label>Upload Mock Ups</label>
-
-<input
-id="mockupImages"
-type="file"
-multiple>
-
-<label>Order Notes</label>
-
-<textarea
-id="orderNotes"
-placeholder="Anything the customer has requested..."></textarea>
-
-</section>
-
-<section class="card">
-
-<h2>💷 Payment</h2>
-
-<label>Order Total (£)</label>
-
-<input
-id="orderTotal"
-type="number"
-value="0.00"
-readonly>
-
-<label>Payment Status</label>
-
-<input
-id="paymentStatus"
-type="text"
-value="Not Paid"
-readonly>
-
-<label>Total Paid (£)</label>
-
-<input
-id="totalPaid"
-type="number"
-value="0.00"
-readonly>
-
-<label>Remaining Balance (£)</label>
-
-<input
-id="remainingBalance"
-type="number"
-value="0.00"
-readonly>
-
-<h3>📜 Payment History</h3>
-
-<div id="paymentHistory">
-
-<p>No payments recorded yet.</p>
-
-</div>
-
-<label>Payment Date</label>
-
-<input
-id="paymentDate"
-type="date">
-
-<label>Amount (£)</label>
-
-<input
-id="paymentAmount"
-type="number"
-step="0.01"
-placeholder="0.00">
-
-<label>Payment Method</label>
-
-<select id="paymentMethod">
-
-<option>Cash</option>
-<option>Bank Transfer</option>
-<option>Card</option>
-<option>PayPal</option>
-<option>Other</option>
-
-</select>
-
-<label>Payment Notes</label>
-
-<textarea
-id="paymentNotes"
-placeholder="Deposit, final payment, etc."></textarea>
-
-<button
-type="button"
-id="savePaymentButton">
-
-💗 Save Payment
-
-</button>
-
-</section>
-
-<section class="card">
-
-<h2>🚚 Collection / Delivery</h2>
-
-<label>Delivery Method</label>
-
-<select id="deliveryMethod">
-
-<option>Collection</option>
-
-<option>Local Delivery</option>
-
-<option>Royal Mail</option>
-
-<option>Evri</option>
-
-<option>InPost</option>
-
-</select>
-
-<div id="addressSection">
-
-<label>Address Line 1</label>
-
-<input
-id="address1"
-type="text">
-
-<label>Address Line 2</label>
-
-<input
-id="address2"
-type="text">
-
-<label>Town / City</label>
-
-<input
-id="town"
-type="text">
-
-<label>County</label>
-
-<input
-id="county"
-type="text">
-
-<label>Postcode</label>
-
-<input
-id="postcode"
-type="text">
-
-</div>
-
-</section>
-
-<section class="card">
-
-<h2>✨ Order Progress</h2>
-
-<label>Order Status</label>
-
-<select id="orderStatus">
-
-<option>New Order</option>
-
-<option>Designing</option>
-
-<option>Making</option>
-
-<option>Ready</option>
-
-<option>Completed</option>
-
-</select>
-
-<div class="progressIcons">
-
-<div>
-
-📝
-
-<br>
-
-New
-
-</div>
-
-<div>
-
-🎨
-
-<br>
-
-Designing
-
-</div>
-
-<div>
-
-🛠
-
-<br>
-
-Making
-
-</div>
-
-<div>
-
-📦
-
-<br>
-
-Ready
-
-</div>
-
-<div>
-
-✅
-
-<br>
-
-Completed
-
-</div>
-
-</div>
-
-</section>
-
-<section class="card">
-
-<button
-type="button"
-id="saveOrderButton">
-
-💗 Save Order
-
-</button>
-
-</section>
-
-</div>
-
-<script src="js/create-order.js"></script>
-
-</body>
-
-</html>
