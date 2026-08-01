@@ -249,114 +249,177 @@ addPaymentButton.style.display="none";
 const saveOrderButton =
 document.getElementById("saveOrderButton");
 
-saveOrderButton.addEventListener("click", saveOrder);
+if (saveOrderButton) {
+
+    saveOrderButton.addEventListener("click", saveOrder);
+
+}
 
 async function saveOrder() {
 
     const order = {
 
-        orderNumber: document.getElementById("orderNumber").value,
+        orderNumber:
+        document.getElementById("orderNumber").value,
 
-        customerName: document.getElementById("customerName").value,
+        customerName:
+        document.getElementById("customerName").value,
 
-        customerContact: document.getElementById("customerContact").value,
+        customerContact:
+        document.getElementById("customerContact").value,
 
-        orderSource: document.getElementById("orderSource").value,
+        orderSource:
+        document.getElementById("orderSource").value,
 
-        socialUsername: document.getElementById("socialUsername").value,
+        socialUsername:
+        document.getElementById("socialUsername").value,
 
-        orderDate: document.getElementById("orderDate").value,
+        orderDate:
+        document.getElementById("orderDate").value,
 
-        dateNeeded: document.getElementById("dateNeeded").value,
+        dateNeeded:
+        document.getElementById("dateNeeded").value,
 
-        orderNotes: document.getElementById("orderNotes").value,
+        orderNotes:
+        document.getElementById("orderNotes").value,
 
-        orderTotal: Number(document.getElementById("orderTotal").value),
+        orderTotal:
+        Number(document.getElementById("orderTotal").value),
 
-        paymentStatus: document.getElementById("paymentStatus").value,
+        paymentStatus:
+        document.getElementById("paymentStatus").value,
 
-        totalPaid: Number(document.getElementById("totalPaid").value),
+        totalPaid:
+        Number(document.getElementById("totalPaid").value),
 
-        remainingBalance: Number(document.getElementById("remainingBalance").value),
+        remainingBalance:
+        Number(document.getElementById("remainingBalance").value),
 
-        deliveryMethod: document.getElementById("deliveryMethod").value,
+        deliveryMethod:
+        document.getElementById("deliveryMethod").value,
 
-        address1: document.getElementById("address1").value,
+        address1:
+        document.getElementById("address1").value,
 
-        address2: document.getElementById("address2").value,
+        address2:
+        document.getElementById("address2").value,
 
-        town: document.getElementById("town").value,
+        town:
+        document.getElementById("town").value,
 
-        county: document.getElementById("county").value,
+        county:
+        document.getElementById("county").value,
 
-        postcode: document.getElementById("postcode").value,
+        postcode:
+        document.getElementById("postcode").value,
 
-        orderStatus: document.getElementById("orderStatus").value,
+        orderStatus:
+        document.getElementById("orderStatus").value,
 
         items: [],
 
         payments: payments
 
-        document
-    .querySelectorAll(".itemCard")
-    .forEach(card=>{
+    };
 
-        order.items.push({
+const order = {
 
-            product:
-            card.querySelector(".itemProduct").value,
+    orderNumber: orderNumber.value,
 
-            quantity:
-            Number(
-                card.querySelector(".itemQuantity").value
-            ),
+    customerName: document.getElementById("customerName").value,
 
-            unitPrice:
-            Number(
-                card.querySelector(".itemPrice").value
-            ),
+    customerContact: document.getElementById("customerContact").value,
 
-            itemTotal:
-            Number(
-                card.querySelector(".itemTotal").value
-            ),
+    orderSource: document.getElementById("orderSource").value,
 
-            size:
-            card.querySelector(".itemSize").value,
+    socialUsername: document.getElementById("socialUsername").value,
 
-            colour:
-            card.querySelector(".itemColour").value,
+    orderDate: orderDate.value,
 
-            personalised:
-            card.querySelector(".itemPersonalised").value,
+    dateNeeded: document.getElementById("dateNeeded").value,
 
-            personalisation:
-            card.querySelector(".itemPersonalisation").value
+    orderNotes: document.getElementById("orderNotes").value,
 
-        });
+    orderTotal: Number(orderTotal.value),
+
+    paymentStatus: document.getElementById("paymentStatus").value,
+
+    totalPaid: Number(document.getElementById("totalPaid").value),
+
+    remainingBalance: Number(document.getElementById("remainingBalance").value),
+
+    deliveryMethod: deliveryMethod.value,
+
+    address1: document.getElementById("address1").value,
+
+    address2: document.getElementById("address2").value,
+
+    town: document.getElementById("town").value,
+
+    county: document.getElementById("county").value,
+
+    postcode: document.getElementById("postcode").value,
+
+    orderStatus: document.getElementById("orderStatus").value,
+
+    items: [],
+
+    payments: payments
+
+};
+
+document
+.querySelectorAll(".itemCard")
+.forEach(card => {
+
+    order.items.push({
+
+        product: card.querySelector(".itemProduct").value,
+
+        quantity: Number(card.querySelector(".itemQuantity").value),
+
+        unitPrice: Number(card.querySelector(".itemPrice").value),
+
+        itemTotal: Number(card.querySelector(".itemTotal").value),
+
+        size: card.querySelector(".itemSize").value,
+
+        colour: card.querySelector(".itemColour").value,
+
+        personalised: card.querySelector(".itemPersonalised").value,
+
+        personalisation: card.querySelector(".itemPersonalisation").value
 
     });
 
-    console.log(order);
-        try {
+});
 
-        await addDoc(
-            collection(db, "orders"),
-            order
-        );
+try {
 
-        alert("✅ Order saved successfully!");
+    await addDoc(
+        collection(db, "orders"),
+        order
+    );
 
-        window.location.href = "orders.html";
+    nextOrderNumber++;
 
-    }
+    localStorage.setItem(
+        "nextOrderNumber",
+        nextOrderNumber
+    );
 
-    catch (error) {
+    alert("✅ Order saved successfully!");
 
-        console.error(error);
+    window.location.href = "dashboard.html";
 
-        alert("❌ Error saving order.");
+}
 
-    }
+catch (error) {
+
+    console.error(error);
+
+    alert("❌ Error saving order:\n" + error.message);
+
+}
 
 }
