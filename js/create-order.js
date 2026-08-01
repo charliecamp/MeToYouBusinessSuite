@@ -169,6 +169,12 @@ function setupItem(card){
         }
     );
 
+    if (personalised.value === "Yes") {
+    personalisationBox.style.display = "block";
+} else {
+    personalisationBox.style.display = "none";
+}
+
     card
     .querySelector(".removeItemButton")
     .addEventListener("click",function(){
