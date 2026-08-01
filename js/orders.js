@@ -109,11 +109,12 @@ ${order.dateNeeded || "Not Set"}
 
 `;
 
-            card.addEventListener("click",()=>{
+            card.addEventListener("click", () => {
 
-                alert(
-                    "View Order page coming next ❤️"
-                );
+    window.location.href =
+    `view-order.html?id=${doc.id}`;
+
+});
 
             });
 
