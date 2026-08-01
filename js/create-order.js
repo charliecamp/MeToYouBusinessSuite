@@ -209,3 +209,28 @@ function updateDeliveryFields() {
 deliveryMethod.addEventListener("change", updateDeliveryFields);
 
 updateDeliveryFields();
+
+// ===========================
+// PAYMENT FORM TOGGLE
+// ===========================
+
+const addPaymentButton =
+document.getElementById("addPaymentButton");
+
+const paymentForm =
+document.getElementById("paymentForm");
+
+if(addPaymentButton){
+
+addPaymentButton.addEventListener("click",function(){
+
+if(paymentForm.style.display==="none"){
+
+paymentForm.style.display="block";
+addPaymentButton.style.display="none";
+
+}
+
+});
+
+}
