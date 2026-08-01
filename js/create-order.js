@@ -248,3 +248,140 @@ function calculateTotal(){
 }
 
 calculateTotal();
+
+// =====================================
+// DELIVERY
+// =====================================
+
+const addressSection =
+document.getElementById("addressSection");
+
+function updateDelivery(){
+
+    if(deliveryMethod.value==="Collection"){
+
+        addressSection.style.display="none";
+
+    }
+
+    else{
+
+        addressSection.style.display="block";
+
+    }
+
+}
+
+deliveryMethod.addEventListener(
+    "change",
+    updateDelivery
+);
+
+updateDelivery();
+
+
+// =====================================
+// PAYMENT
+// =====================================
+
+const paymentHistory =
+document.getElementById("paymentHistory");
+
+const savePaymentButton =
+document.getElementById("savePaymentButton");
+
+addPaymentButton.addEventListener("click",function(){
+
+    paymentForm.style.display="block";
+
+});
+
+savePaymentButton.addEventListener("click",savePayment);
+
+function savePayment(){
+
+    const payment={
+
+        date:
+        document.getElementById("paymentDate").value,
+
+        amount:
+        Number(document.getElementById("paymentAmount").value)||0,
+
+        method:
+        document.getElementById("paymentMethod").value,
+
+        notes:
+        document.getElementById("paymentNotes").value
+
+    };
+
+    if(payment.amount<=0){
+
+        alert("Enter a payment amount.");
+
+        return;
+
+    }
+
+    payments.push(payment);
+
+    updatePayments();
+
+    paymentForm.style.display="none";
+
+}
+
+function updatePayments(){
+
+    let paid = 0;
+
+    paymentHistory.innerHTML = "";
+
+    payments.forEach(payment=>{
+
+        paid += payment.amount;
+
+        paymentHistory.innerHTML += `
+            <div class="paymentEntry">
+                <strong>£${payment.amount.toFixed(2)}</strong><br>
+                ${payment.method}<br>
+                ${payment.date}
+            </div>
+        `;
+
+    });
+
+    if(payments.length===0){
+
+        paymentHistory.innerHTML =
+        "<p>No payments recorded yet.</p>";
+
+    }
+
+    totalPaid.value = paid.toFixed(2);
+
+    remainingBalance.value =
+    (
+        Number(orderTotal.value)-paid
+    ).toFixed(2);
+
+    if(paid===0){
+
+        paymentStatus.value="Not Paid";
+
+    }
+
+    else if(paid>=Number(orderTotal.value)){
+
+        paymentStatus.value="Paid in Full";
+
+    }
+
+    else{
+
+        paymentStatus.value="Deposit Paid";
+
+    }
+
+}
