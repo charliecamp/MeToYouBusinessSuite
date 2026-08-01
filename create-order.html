@@ -7,12 +7,14 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create New Order</title>
+<title>Create New Order | Me To You Designs</title>
 
-<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="css/create-order.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
 
 </head>
 
@@ -22,14 +24,17 @@
 
 <header class="order-header">
 
-<a href="dashboard.html" class="back-button">
+<button
+type="button"
+class="back-button"
+onclick="location.href='dashboard.html'">
 
-← Back
+←
 
-</a>
+</button>
 
 <img
-src="images/logo.png"
+src="logo.PNG"
 class="logo"
 alt="Me To You Designs">
 
@@ -41,29 +46,13 @@ alt="Me To You Designs">
 
 </div>
 
+<p>
+
+Complete the form below to create a new customer order.
+
+</p>
+
 </header>
-
-<!-- Customer Details goes here -->
-
-<!-- Items Ordered goes here -->
-
-<!-- Order Details goes here -->
-
-<!-- Payment goes here -->
-
-<!-- Delivery goes here -->
-
-<!-- Order Progress goes here -->
-
-<!-- Save Button goes here -->
-
-</div>
-
-<script src="js/create-order.js"></script>
-
-</body>
-
-</html>
 
 <section class="card">
 
@@ -118,7 +107,7 @@ placeholder="@username">
 <input
 type="text"
 class="itemProduct"
-placeholder="Example: Balloon Arch">
+placeholder="Example: Balloon Stack">
 
 <label>Quantity</label>
 
@@ -148,22 +137,20 @@ readonly>
 
 <input
 type="text"
-class="itemSize"
-placeholder="Large">
+class="itemSize">
 
 <label>Colour / Theme</label>
 
 <input
 type="text"
 class="itemColour"
-placeholder="Bluey, Pink, Football...">
+placeholder="Pink, Bluey, Football...">
 
 <label>Personalised?</label>
 
 <select class="itemPersonalised">
 
 <option>No</option>
-
 <option>Yes</option>
 
 </select>
@@ -182,7 +169,7 @@ placeholder="Name, wording or message..."></textarea>
 type="button"
 class="removeItemButton">
 
-❌ Remove Item
+🗑 Remove Item
 
 </button>
 
@@ -219,11 +206,38 @@ type="date">
 
 <label>Date Needed By</label>
 
+<input
+id="dateNeeded"
+type="date">
+
+<label>Upload Customer Images</label>
+
+<input
+id="customerImages"
+type="file"
+multiple>
+
+<label>Upload Mock Ups</label>
+
+<input
+id="mockupImages"
+type="file"
+multiple>
+
+<label>Order Notes</label>
+
+<textarea
+id="orderNotes"
+placeholder="Anything the customer has requested..."></textarea>
+
+</section>
+
 <section class="card">
 
 <h2>💷 Payment</h2>
 
 <label>Order Total (£)</label>
+
 <input
 id="orderTotal"
 type="number"
@@ -231,6 +245,7 @@ value="0.00"
 readonly>
 
 <label>Payment Status</label>
+
 <input
 id="paymentStatus"
 type="text"
@@ -238,6 +253,7 @@ value="Not Paid"
 readonly>
 
 <label>Total Paid (£)</label>
+
 <input
 id="totalPaid"
 type="number"
@@ -245,6 +261,7 @@ value="0.00"
 readonly>
 
 <label>Remaining Balance (£)</label>
+
 <input
 id="remainingBalance"
 type="number"
@@ -285,7 +302,7 @@ placeholder="0.00">
 
 </select>
 
-<label>Notes</label>
+<label>Payment Notes</label>
 
 <textarea
 id="paymentNotes"
@@ -303,43 +320,52 @@ id="savePaymentButton">
 
 <section class="card">
 
-<h2>🚚 Delivery</h2>
+<h2>🚚 Collection / Delivery</h2>
 
 <label>Delivery Method</label>
 
 <select id="deliveryMethod">
 
 <option>Collection</option>
+
 <option>Local Delivery</option>
+
 <option>Royal Mail</option>
+
 <option>Evri</option>
+
 <option>InPost</option>
 
 </select>
 
-<div id="deliveryAddress">
+<div id="addressSection">
 
 <label>Address Line 1</label>
+
 <input
 id="address1"
 type="text">
 
 <label>Address Line 2</label>
+
 <input
 id="address2"
 type="text">
 
 <label>Town / City</label>
+
 <input
 id="town"
 type="text">
 
 <label>County</label>
+
 <input
 id="county"
 type="text">
 
 <label>Postcode</label>
+
 <input
 id="postcode"
 type="text">
@@ -352,29 +378,73 @@ type="text">
 
 <h2>✨ Order Progress</h2>
 
-<label>Order Progress</label>
+<label>Order Status</label>
 
 <select id="orderStatus">
 
 <option>New Order</option>
+
 <option>Designing</option>
+
 <option>Making</option>
+
 <option>Ready</option>
+
 <option>Completed</option>
 
 </select>
 
 <div class="progressIcons">
 
-<div>📝<br>New Order</div>
+<div>
 
-<div>🎨<br>Designing</div>
+📝
 
-<div>🛠️<br>Making</div>
+<br>
 
-<div>📦<br>Ready</div>
+New
 
-<div>✅<br>Completed</div>
+</div>
+
+<div>
+
+🎨
+
+<br>
+
+Designing
+
+</div>
+
+<div>
+
+🛠
+
+<br>
+
+Making
+
+</div>
+
+<div>
+
+📦
+
+<br>
+
+Ready
+
+</div>
+
+<div>
+
+✅
+
+<br>
+
+Completed
+
+</div>
 
 </div>
 
