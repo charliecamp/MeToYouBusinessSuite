@@ -2,11 +2,14 @@ import { db } from "./firebase.js";
 
 import {
     doc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+    getDoc,
+    updateDoc,
+    serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
 // =====================================
-// VIEW ORDER
+// VIEW / EDIT ORDER
 // =====================================
 
 const params =
@@ -15,11 +18,43 @@ new URLSearchParams(window.location.search);
 const orderId =
 params.get("id");
 
-const orderNumber =
-document.getElementById("orderNumber");
+// ---------- CUSTOMER ----------
 
 const customerName =
 document.getElementById("customerName");
+
+const customerContact =
+document.getElementById("customerContact");
+
+const orderSource =
+document.getElementById("orderSource");
+
+const socialUsername =
+document.getElementById("socialUsername");
+
+// ---------- ORDER ----------
+
+const orderNumber =
+document.getElementById("orderNumber");
+
+const orderDate =
+document.getElementById("orderDate");
+
+const dateNeeded =
+document.getElementById("dateNeeded");
+
+const orderNotes =
+document.getElementById("orderNotes");
+
+// ---------- ITEMS ----------
+
+const itemsContainer =
+document.getElementById("itemsContainer");
+
+const addItemButton =
+document.getElementById("addItemButton");
+
+// ---------- PAYMENT ----------
 
 const orderTotal =
 document.getElementById("orderTotal");
@@ -27,26 +62,57 @@ document.getElementById("orderTotal");
 const paymentStatus =
 document.getElementById("paymentStatus");
 
-const customerSection =
-document.getElementById("customerSection");
+const totalPaid =
+document.getElementById("totalPaid");
 
-const itemsSection =
-document.getElementById("itemsSection");
+const remainingBalance =
+document.getElementById("remainingBalance");
 
-const paymentsSection =
-document.getElementById("paymentsSection");
+const paymentHistory =
+document.getElementById("paymentHistory");
 
-const deliverySection =
-document.getElementById("deliverySection");
+const paymentForm =
+document.getElementById("paymentForm");
 
-const notesSection =
-document.getElementById("notesSection");
+const addPaymentButton =
+document.getElementById("addPaymentButton");
 
-const imagesSection =
-document.getElementById("imagesSection");
+const savePaymentButton =
+document.getElementById("savePaymentButton");
 
-const statusSection =
-document.getElementById("statusSection");
+// ---------- DELIVERY ----------
+
+const deliveryMethod =
+document.getElementById("deliveryMethod");
+
+const address1 =
+document.getElementById("address1");
+
+const address2 =
+document.getElementById("address2");
+
+const town =
+document.getElementById("town");
+
+const county =
+document.getElementById("county");
+
+const postcode =
+document.getElementById("postcode");
+
+// ---------- STATUS ----------
+
+const orderStatus =
+document.getElementById("orderStatus");
+
+// ---------- SAVE ----------
+
+const saveChangesButton =
+document.getElementById("saveChanges");
+
+let payments = [];
+
+let currentOrder = null;
 
 loadOrder();
 
@@ -73,145 +139,370 @@ async function loadOrder(){
 
     }
 
-    const order =
-    snapshot.data();
+    currentOrder =
+snapshot.data();
 
-    orderNumber.textContent =
-    order.orderNumber;
+loadItems();
 
-    customerName.textContent =
-    order.customerName;
+}
 
-    orderTotal.textContent =
-    "£"+
-    Number(order.orderTotal).toFixed(2);
+    // =====================================
+    // POPULATE FORM
+    // =====================================
 
-    paymentStatus.textContent =
-    order.paymentStatus;
+    orderNumber.value =
+    currentOrder.orderNumber || "";
 
-    customerSection.innerHTML=`
+    customerName.value =
+    currentOrder.customerName || "";
 
-<h3>Customer Details</h3>
+    customerContact.value =
+    currentOrder.customerContact || "";
 
-<p><strong>Name:</strong>
-${order.customerName}</p>
+    orderSource.value =
+    currentOrder.orderSource || "Facebook";
 
-<p><strong>Contact:</strong>
-${order.customerContact}</p>
+    socialUsername.value =
+    currentOrder.socialUsername || "";
 
-<p><strong>Order Source:</strong>
-${order.orderSource}</p>
+    orderDate.value =
+    currentOrder.orderDate || "";
 
-<p><strong>Social:</strong>
-${order.socialUsername}</p>
+    dateNeeded.value =
+    currentOrder.dateNeeded || "";
+
+    orderNotes.value =
+    currentOrder.orderNotes || "";
+
+    orderTotal.value =
+    Number(
+        currentOrder.orderTotal || 0
+    ).toFixed(2);
+
+    paymentStatus.value =
+    currentOrder.paymentStatus || "Not Paid";
+
+    totalPaid.value =
+    Number(
+        currentOrder.totalPaid || 0
+    ).toFixed(2);
+
+    remainingBalance.value =
+    Number(
+        currentOrder.remainingBalance || 0
+    ).toFixed(2);
+
+    deliveryMethod.value =
+    currentOrder.deliveryMethod || "Collection";
+
+    address1.value =
+    currentOrder.address1 || "";
+
+    address2.value =
+    currentOrder.address2 || "";
+
+    town.value =
+    currentOrder.town || "";
+
+    county.value =
+    currentOrder.county || "";
+
+    postcode.value =
+    currentOrder.postcode || "";
+
+    orderStatus.value =
+    currentOrder.orderStatus || "New Order";
+
+    payments =
+    currentOrder.payments || [];
+
+}
+// =====================================
+// LOAD ITEMS
+// =====================================
+
+loadItems();
+
+function loadItems(){
+
+    if(!currentOrder) return;
+
+    itemsContainer.innerHTML="";
+
+    currentOrder.items.forEach(item=>{
+
+        const card =
+        document.createElement("div");
+
+        card.className="itemCard";
+
+        card.innerHTML=`
+
+<label>Product</label>
+
+<input
+type="text"
+class="itemProduct"
+value="${item.product||""}">
+
+<label>Quantity</label>
+
+<input
+type="number"
+class="itemQuantity"
+value="${item.quantity||1}">
+
+<label>Unit Price (£)</label>
+
+<input
+type="number"
+class="itemPrice"
+step="0.01"
+value="${item.unitPrice||0}">
+
+<label>Item Total (£)</label>
+
+<input
+type="number"
+class="itemTotal"
+readonly
+value="${item.itemTotal||0}">
+
+<label>Size</label>
+
+<input
+type="text"
+class="itemSize"
+value="${item.size||""}">
+
+<label>Colour / Theme</label>
+
+<input
+type="text"
+class="itemColour"
+value="${item.colour||""}">
+
+<label>Personalised?</label>
+
+<select class="itemPersonalised">
+
+<option ${item.personalised==="No"?"selected":""}>
+No
+</option>
+
+<option ${item.personalised==="Yes"?"selected":""}>
+Yes
+</option>
+
+</select>
+
+<div class="personalisationBox">
+
+<label>Personalisation</label>
+
+<textarea
+class="itemPersonalisation">${item.personalisation||""}</textarea>
+
+</div>
+
+<button
+type="button"
+class="removeItemButton">
+
+🗑 Remove Item
+
+</button>
 
 `;
 
-    itemsSection.innerHTML="";
+        itemsContainer.appendChild(card);
 
-    order.items.forEach(item=>{
-
-        itemsSection.innerHTML+=`
-
-        <div class="itemCard">
-
-            <h3>${item.product}</h3>
-
-            <p>
-
-            Qty:
-            ${item.quantity}
-
-            </p>
-
-            <p>
-
-            £${item.unitPrice}
-
-            </p>
-
-            <p>
-
-            ${item.colour}
-
-            </p>
-
-        </div>
-
-        `;
+        setupItem(card);
 
     });
 
-    paymentsSection.innerHTML="";
+    calculateTotal();
 
-    order.payments.forEach(payment=>{
+}
 
-        paymentsSection.innerHTML+=`
+addItemButton.addEventListener(
+"click",
+addNewItem
+);
 
-        <div class="paymentCard">
+function addNewItem(){
 
-            £${payment.amount}
+    const first =
+    document.querySelector(".itemCard");
 
-            <br>
+    const clone =
+    first.cloneNode(true);
 
-            ${payment.method}
+    clone.querySelectorAll("input").forEach(input=>{
 
-            <br>
+        if(input.type==="number"){
 
-            ${payment.date}
+            input.value=0;
 
-        </div>
+        }
 
-        `;
+        else{
+
+            input.value="";
+
+        }
 
     });
 
-    deliverySection.innerHTML=`
+    clone.querySelector("textarea").value="";
 
-<p>
+    clone.querySelector(".itemQuantity").value=1;
 
-${order.deliveryMethod}
+    clone.querySelector(".itemTotal").value="0.00";
 
-</p>
+    clone.querySelector(".itemPersonalised").value="No";
 
-<p>
+    itemsContainer.appendChild(clone);
 
-${order.address1}
+    setupItem(clone);
 
-</p>
+}
 
-<p>
+// =====================================
+// SAVE CHANGES
+// =====================================
 
-${order.town}
+saveChangesButton.addEventListener(
+"click",
+saveChanges
+);
 
-</p>
+async function saveChanges(){
 
-<p>
+    const items=[];
 
-${order.postcode}
+    document
+    .querySelectorAll(".itemCard")
+    .forEach(card=>{
 
-</p>
+        items.push({
 
-`;
+            product:
+            card.querySelector(".itemProduct").value,
 
-    notesSection.innerHTML=`
+            quantity:
+            Number(card.querySelector(".itemQuantity").value),
 
-<p>
+            unitPrice:
+            Number(card.querySelector(".itemPrice").value),
 
-${order.orderNotes}
+            itemTotal:
+            Number(card.querySelector(".itemTotal").value),
 
-</p>
+            size:
+            card.querySelector(".itemSize").value,
 
-`;
+            colour:
+            card.querySelector(".itemColour").value,
 
-    statusSection.innerHTML=`
+            personalised:
+            card.querySelector(".itemPersonalised").value,
 
-<h3>
+            personalisation:
+            card.querySelector(".itemPersonalisation").value
 
-${order.orderStatus}
+        });
 
-</h3>
+    });
 
-`;
+    try{
+
+        await updateDoc(
+
+            doc(db,"orders",orderId),
+
+            {
+
+                customerName:
+                customerName.value,
+
+                customerContact:
+                customerContact.value,
+
+                orderSource:
+                orderSource.value,
+
+                socialUsername:
+                socialUsername.value,
+
+                orderDate:
+                orderDate.value,
+
+                dateNeeded:
+                dateNeeded.value,
+
+                orderNotes:
+                orderNotes.value,
+
+                orderTotal:
+                Number(orderTotal.value),
+
+                paymentStatus:
+                paymentStatus.value,
+
+                totalPaid:
+                Number(totalPaid.value),
+
+                remainingBalance:
+                Number(remainingBalance.value),
+
+                deliveryMethod:
+                deliveryMethod.value,
+
+                address1:
+                address1.value,
+
+                address2:
+                address2.value,
+
+                town:
+                town.value,
+
+                county:
+                county.value,
+
+                postcode:
+                postcode.value,
+
+                orderStatus:
+                orderStatus.value,
+
+                items:
+                items,
+
+                payments:
+                payments,
+
+                updatedAt:
+                serverTimestamp()
+
+            }
+
+        );
+
+        alert("💖 Order updated successfully!");
+
+        window.location.href=
+        "orders.html";
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert(error.message);
+
+    }
 
 }
