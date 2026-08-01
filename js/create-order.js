@@ -102,14 +102,21 @@ card.querySelector(".personalisationBox");
 qty.oninput = updateOrderTotal;
 price.oninput = updateOrderTotal;
 
-personalised.onchange = function(){
+function togglePersonalisation(){
 
 personalisation.style.display =
-this.value==="Yes"
+personalised.value==="Yes"
 ? "block"
 : "none";
 
-};
+}
+
+personalised.addEventListener(
+"change",
+togglePersonalisation
+);
+
+togglePersonalisation();
 
 card
 .querySelector(".removeItemButton")
