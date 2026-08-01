@@ -4,6 +4,7 @@ import {
     doc,
     getDoc,
     updateDoc,
+    deleteDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
@@ -104,16 +105,26 @@ document.getElementById("postcode");
 const orderStatus =
 document.getElementById("orderStatus");
 
-// ---------- SAVE ----------
+// ---------- BUTTONS ----------
 
 const saveChangesButton =
 document.getElementById("saveChanges");
 
-let payments = [];
+const deleteOrderButton =
+document.getElementById("deleteOrder");
+
+// ---------- VARIABLES ----------
 
 let currentOrder = null;
 
+let payments = [];
+
+// ---------- START ----------
+
 loadOrder();
+// =====================================
+// LOAD ORDER
+// =====================================
 
 async function loadOrder(){
 
@@ -125,131 +136,144 @@ async function loadOrder(){
 
     }
 
-    const snapshot =
-    await getDoc(
-        doc(db,"orders",orderId)
-    );
+    try{
 
-    if(!snapshot.exists()){
+        const snapshot =
+        await getDoc(
+            doc(db,"orders",orderId)
+        );
 
-        alert("Order not found.");
+        if(!snapshot.exists()){
 
-        return;
+            alert("Order not found.");
+
+            return;
+
+        }
+
+        currentOrder =
+        snapshot.data();
+
+        payments =
+        currentOrder.payments || [];
+
+        // ---------- CUSTOMER ----------
+
+        customerName.value =
+        currentOrder.customerName || "";
+
+        customerContact.value =
+        currentOrder.customerContact || "";
+
+        orderSource.value =
+        currentOrder.orderSource || "Facebook";
+
+        socialUsername.value =
+        currentOrder.socialUsername || "";
+
+        // ---------- ORDER ----------
+
+        orderNumber.value =
+        currentOrder.orderNumber || "";
+
+        orderDate.value =
+        currentOrder.orderDate || "";
+
+        dateNeeded.value =
+        currentOrder.dateNeeded || "";
+
+        orderNotes.value =
+        currentOrder.orderNotes || "";
+
+        // ---------- PAYMENT ----------
+
+        orderTotal.value =
+        Number(currentOrder.orderTotal || 0).toFixed(2);
+
+        paymentStatus.value =
+        currentOrder.paymentStatus || "Not Paid";
+
+        totalPaid.value =
+        Number(currentOrder.totalPaid || 0).toFixed(2);
+
+        remainingBalance.value =
+        Number(currentOrder.remainingBalance || 0).toFixed(2);
+
+        // ---------- DELIVERY ----------
+
+        deliveryMethod.value =
+        currentOrder.deliveryMethod || "Collection";
+
+        address1.value =
+        currentOrder.address1 || "";
+
+        address2.value =
+        currentOrder.address2 || "";
+
+        town.value =
+        currentOrder.town || "";
+
+        county.value =
+        currentOrder.county || "";
+
+        postcode.value =
+        currentOrder.postcode || "";
+
+        // ---------- STATUS ----------
+
+        orderStatus.value =
+        currentOrder.orderStatus || "New Order";
+
+        loadItems();
 
     }
 
-    currentOrder =
-snapshot.data();
+    catch(error){
 
-loadItems();
+        console.error(error);
 
-}
+        alert(error.message);
 
-    // =====================================
-    // POPULATE FORM
-    // =====================================
-
-    orderNumber.value =
-    currentOrder.orderNumber || "";
-
-    customerName.value =
-    currentOrder.customerName || "";
-
-    customerContact.value =
-    currentOrder.customerContact || "";
-
-    orderSource.value =
-    currentOrder.orderSource || "Facebook";
-
-    socialUsername.value =
-    currentOrder.socialUsername || "";
-
-    orderDate.value =
-    currentOrder.orderDate || "";
-
-    dateNeeded.value =
-    currentOrder.dateNeeded || "";
-
-    orderNotes.value =
-    currentOrder.orderNotes || "";
-
-    orderTotal.value =
-    Number(
-        currentOrder.orderTotal || 0
-    ).toFixed(2);
-
-    paymentStatus.value =
-    currentOrder.paymentStatus || "Not Paid";
-
-    totalPaid.value =
-    Number(
-        currentOrder.totalPaid || 0
-    ).toFixed(2);
-
-    remainingBalance.value =
-    Number(
-        currentOrder.remainingBalance || 0
-    ).toFixed(2);
-
-    deliveryMethod.value =
-    currentOrder.deliveryMethod || "Collection";
-
-    address1.value =
-    currentOrder.address1 || "";
-
-    address2.value =
-    currentOrder.address2 || "";
-
-    town.value =
-    currentOrder.town || "";
-
-    county.value =
-    currentOrder.county || "";
-
-    postcode.value =
-    currentOrder.postcode || "";
-
-    orderStatus.value =
-    currentOrder.orderStatus || "New Order";
-
-    payments =
-    currentOrder.payments || [];
+    }
 
 }
+
 // =====================================
 // LOAD ITEMS
 // =====================================
-
-loadItems();
 
 function loadItems(){
 
     if(!currentOrder) return;
 
-    itemsContainer.innerHTML="";
+    itemsContainer.innerHTML = "";
 
-    currentOrder.items.forEach(item=>{
+    const items =
+    currentOrder.items || [];
+
+    items.forEach(item=>{
 
         const card =
         document.createElement("div");
 
-        card.className="itemCard";
+        card.className = "itemCard";
 
-        card.innerHTML=`
+        card.innerHTML = `
 
 <label>Product</label>
 
 <input
 type="text"
 class="itemProduct"
-value="${item.product||""}">
+value="${item.product || ""}">
 
 <label>Quantity</label>
 
 <input
 type="number"
 class="itemQuantity"
-value="${item.quantity||1}">
+value="${item.quantity || 1}"
+min="1">
 
 <label>Unit Price (£)</label>
 
@@ -257,7 +281,7 @@ value="${item.quantity||1}">
 type="number"
 class="itemPrice"
 step="0.01"
-value="${item.unitPrice||0}">
+value="${item.unitPrice || 0}">
 
 <label>Item Total (£)</label>
 
@@ -265,21 +289,21 @@ value="${item.unitPrice||0}">
 type="number"
 class="itemTotal"
 readonly
-value="${item.itemTotal||0}">
+value="${item.itemTotal || 0}">
 
 <label>Size</label>
 
 <input
 type="text"
 class="itemSize"
-value="${item.size||""}">
+value="${item.size || ""}">
 
 <label>Colour / Theme</label>
 
 <input
 type="text"
 class="itemColour"
-value="${item.colour||""}">
+value="${item.colour || ""}">
 
 <label>Personalised?</label>
 
@@ -295,12 +319,13 @@ Yes
 
 </select>
 
-<div class="personalisationBox">
+<div class="personalisationBox"
+style="${item.personalised==="Yes" ? "display:block;" : "display:none;"}">
 
 <label>Personalisation</label>
 
 <textarea
-class="itemPersonalisation">${item.personalisation||""}</textarea>
+class="itemPersonalisation">${item.personalisation || ""}</textarea>
 
 </div>
 
@@ -316,54 +341,197 @@ class="removeItemButton">
 
         itemsContainer.appendChild(card);
 
-        setupItem(card);
-
     });
+
+}
+
+// =====================================
+// ITEMS
+// =====================================
+
+addItemButton.addEventListener(
+    "click",
+    addNewItem
+);
+
+function addNewItem(){
+
+    const card =
+    document.createElement("div");
+
+    card.className = "itemCard";
+
+    card.innerHTML = `
+
+<label>Product</label>
+
+<input
+type="text"
+class="itemProduct">
+
+<label>Quantity</label>
+
+<input
+type="number"
+class="itemQuantity"
+value="1"
+min="1">
+
+<label>Unit Price (£)</label>
+
+<input
+type="number"
+class="itemPrice"
+value="0.00"
+step="0.01">
+
+<label>Item Total (£)</label>
+
+<input
+type="number"
+class="itemTotal"
+value="0.00"
+readonly>
+
+<label>Size</label>
+
+<input
+type="text"
+class="itemSize">
+
+<label>Colour / Theme</label>
+
+<input
+type="text"
+class="itemColour">
+
+<label>Personalised?</label>
+
+<select class="itemPersonalised">
+
+<option>No</option>
+
+<option>Yes</option>
+
+</select>
+
+<div
+class="personalisationBox"
+style="display:none;">
+
+<label>Personalisation</label>
+
+<textarea
+class="itemPersonalisation"></textarea>
+
+</div>
+
+<button
+type="button"
+class="removeItemButton">
+
+🗑 Remove Item
+
+</button>
+
+`;
+
+    itemsContainer.appendChild(card);
+
+    setupItem(card);
 
     calculateTotal();
 
 }
 
-addItemButton.addEventListener(
-"click",
-addNewItem
-);
+function setupItem(card){
 
-function addNewItem(){
+    const qty =
+    card.querySelector(".itemQuantity");
 
-    const first =
-    document.querySelector(".itemCard");
+    const price =
+    card.querySelector(".itemPrice");
 
-    const clone =
-    first.cloneNode(true);
+    const personalised =
+    card.querySelector(".itemPersonalised");
 
-    clone.querySelectorAll("input").forEach(input=>{
+    const box =
+    card.querySelector(".personalisationBox");
 
-        if(input.type==="number"){
+    qty.addEventListener(
+        "input",
+        calculateTotal
+    );
 
-            input.value=0;
+    price.addEventListener(
+        "input",
+        calculateTotal
+    );
+
+    personalised.addEventListener(
+        "change",
+        ()=>{
+
+            box.style.display =
+            personalised.value==="Yes"
+            ? "block"
+            : "none";
+
+        }
+    );
+
+    card
+    .querySelector(".removeItemButton")
+    .addEventListener("click",()=>{
+
+        if(document.querySelectorAll(".itemCard").length===1){
+
+            alert("At least one item is required.");
+
+            return;
 
         }
 
-        else{
+        card.remove();
 
-            input.value="";
-
-        }
+        calculateTotal();
 
     });
 
-    clone.querySelector("textarea").value="";
+}
 
-    clone.querySelector(".itemQuantity").value=1;
+function calculateTotal(){
 
-    clone.querySelector(".itemTotal").value="0.00";
+    let total = 0;
 
-    clone.querySelector(".itemPersonalised").value="No";
+    document
+    .querySelectorAll(".itemCard")
+    .forEach(card=>{
 
-    itemsContainer.appendChild(clone);
+        const qty =
+        Number(card.querySelector(".itemQuantity").value) || 0;
 
-    setupItem(clone);
+        const price =
+        Number(card.querySelector(".itemPrice").value) || 0;
+
+        const itemTotal =
+        qty * price;
+
+        card.querySelector(".itemTotal").value =
+        itemTotal.toFixed(2);
+
+        total += itemTotal;
+
+    });
+
+    orderTotal.value =
+    total.toFixed(2);
+
+    remainingBalance.value =
+    (
+        total -
+        Number(totalPaid.value)
+    ).toFixed(2);
 
 }
 
@@ -372,13 +540,13 @@ function addNewItem(){
 // =====================================
 
 saveChangesButton.addEventListener(
-"click",
-saveChanges
+    "click",
+    saveChanges
 );
 
 async function saveChanges(){
 
-    const items=[];
+    const items = [];
 
     document
     .querySelectorAll(".itemCard")
@@ -433,6 +601,9 @@ async function saveChanges(){
 
                 socialUsername:
                 socialUsername.value,
+
+                orderNumber:
+                orderNumber.value,
 
                 orderDate:
                 orderDate.value,
@@ -489,9 +660,9 @@ async function saveChanges(){
 
         );
 
-        alert("💖 Order updated successfully!");
+        alert("✅ Order updated successfully!");
 
-        window.location.href=
+        window.location.href =
         "orders.html";
 
     }
