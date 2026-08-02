@@ -1,0 +1,89 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f8f4f7;
+    color:#444;
+}
+
+.page{
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.backButton{
+    float:left;
+    border:none;
+    background:none;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    width:90px;
+    margin:10px auto;
+    display:block;
+}
+
+h1{
+    font-family:'Great Vibes',cursive;
+    color:#d46a92;
+    font-size:48px;
+    margin-bottom:10px;
+}
+
+header p{
+    color:#777;
+}
+
+.card{
+    background:#fff;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.card h2{
+    color:#d46a92;
+    margin-bottom:15px;
+}
+
+.actionButtons{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.actionButtons button{
+    border:none;
+    border-radius:12px;
+    padding:15px;
+    font-size:16px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+#saveChanges{
+    background:#d46a92;
+    color:white;
+}
+
+#duplicateOrder{
+    background:#ffd9e6;
+}
+
+#deleteOrder{
+    background:#ff4d6d;
+    color:white;
+}
