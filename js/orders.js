@@ -115,10 +115,10 @@ function displayOrders(orders){
 
         card.addEventListener("click",()=>{
 
-        window.location.href =
-`order-details.html?id=${order.id}`;
-            
-        });
+    window.location.href =
+    `order-details.html?id=${order.id}`;
+
+});
 
         ordersContainer.appendChild(card);
 
