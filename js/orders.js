@@ -126,3 +126,82 @@ function displayOrders(orders){
 
 }
 
+// =====================================
+// SEARCH
+// =====================================
+
+searchBox.addEventListener("input",()=>{
+
+    const text =
+    searchBox.value.toLowerCase();
+
+    const filtered =
+    allOrders.filter(order=>
+
+        (order.customerName || "")
+        .toLowerCase()
+        .includes(text)
+
+        ||
+
+        (order.orderNumber || "")
+        .toLowerCase()
+        .includes(text)
+
+        ||
+
+        (order.customerContact || "")
+        .toLowerCase()
+        .includes(text)
+
+    );
+
+    displayOrders(filtered);
+
+});
+
+// =====================================
+// FILTERS
+// =====================================
+
+const filterButtons =
+document.querySelectorAll(".filterBar button");
+
+filterButtons.forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+        filterButtons.forEach(btn=>
+            btn.classList.remove("active")
+        );
+
+        button.classList.add("active");
+
+        const filter =
+        button.textContent.trim();
+
+        if(filter==="All"){
+
+            displayOrders(allOrders);
+
+            return;
+
+        }
+
+        const filtered =
+        allOrders.filter(order=>
+
+            (order.orderStatus || "New Order")
+            .toLowerCase()
+
+            ===
+
+            filter.toLowerCase()
+
+        );
+
+        displayOrders(filtered);
+
+    });
+
+});
