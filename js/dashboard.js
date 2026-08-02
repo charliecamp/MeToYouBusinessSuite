@@ -494,7 +494,7 @@ function updateStats(){
 // DUE DATES
 // ======================================
 
-unction calculateDueDates(){
+function calculateDueDates(){
 
     const today =
     new Date();
