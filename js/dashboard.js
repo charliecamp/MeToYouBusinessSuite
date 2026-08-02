@@ -548,16 +548,81 @@ function calculateDueDates(){
 
 function loadNextOrder(){
 
-    const card =
-    document.getElementById("nextOrderCard");
+    if(!nextOrderCard) return;
 
-    if(card){
+    const activeOrders =
+    orders.filter(order=>
 
-        card.innerHTML =
+        order.dateNeeded &&
 
+        order.orderStatus !== "Completed"
+
+    );
+
+    if(activeOrders.length===0){
+
+        nextOrderCard.innerHTML=
         "<p>No upcoming orders.</p>";
 
+        return;
+
     }
+
+    activeOrders.sort((a,b)=>
+
+        new Date(a.dateNeeded)-new Date(b.dateNeeded)
+
+    );
+
+    const next =
+    activeOrders[0];
+
+    const today =
+    new Date();
+
+    const due =
+    new Date(next.dateNeeded);
+
+    const days =
+    Math.ceil(
+
+        (due-today)/(1000*60*60*24)
+
+    );
+
+    let dueText="";
+
+    if(days<0){
+
+        dueText=`⚠️ ${Math.abs(days)} day(s) overdue`;
+
+    }
+
+    else if(days===0){
+
+        dueText="Today";
+
+    }
+
+    else{
+
+        dueText=`${days} day(s) remaining`;
+
+    }
+
+    nextOrderCard.innerHTML=`
+
+        <h3>${next.orderNumber}</h3>
+
+        <p><strong>${next.customerName}</strong></p>
+
+        <p>📅 ${next.dateNeeded}</p>
+
+        <p>${dueText}</p>
+
+        <p>✨ ${next.orderStatus}</p>
+
+    `;
 
 }
 
