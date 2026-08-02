@@ -411,19 +411,19 @@ toggleButtons.forEach((button,index)=>{
     const savedState =
     localStorage.getItem(storageKey);
 
-    if(savedState==="open"){
+if(savedState==="closed"){
 
-        content.style.display="block";
+    content.style.display="none";
 
-        button.textContent="▼";
+    button.textContent="▶";
 
-    }else{
+}else{
 
-        content.style.display="none";
+    content.style.display="block";
 
-        button.textContent="▶";
+    button.textContent="▼";
 
-    }
+}
 
     button.addEventListener("click",()=>{
 
