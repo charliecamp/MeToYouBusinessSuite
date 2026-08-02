@@ -1,3 +1,10 @@
+import { db } from "./firebase.js";
+
+import {
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+
 // ======================================
 // Me To You Designs
 // Dashboard
@@ -90,8 +97,7 @@ if(logoutButton){
 // STORAGE
 // ======================================
 
-let orders =
-JSON.parse(localStorage.getItem("orders")) || [];
+let orders = [];
 
 let jobs =
 JSON.parse(localStorage.getItem("todayJobs")) || [];
@@ -103,11 +109,43 @@ JSON.parse(localStorage.getItem("notes")) || [];
 // PAGE LOAD
 // ======================================
 
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded", async ()=>{
 
     console.log("Dashboard Loaded");
 
+    await loadOrders();
+
 });
+
+// ======================================
+// LOAD ORDERS FROM FIRESTORE
+// ======================================
+
+async function loadOrders(){
+
+    const snapshot =
+    await getDocs(
+        collection(db,"orders")
+    );
+
+    orders = [];
+
+    snapshot.forEach(doc=>{
+
+        orders.push({
+
+            id: doc.id,
+
+            ...doc.data()
+
+        });
+
+    });
+
+    updateDashboard();
+
+}
+
 
 // ======================================
 // TODAY'S JOBS
@@ -437,32 +475,18 @@ function updateDashboard(){
 
 function updateStats(){
 
-    const totalOrders =
-    document.getElementById("totalOrders");
+    document.getElementById("totalOrders").textContent =
+    orders.length;
 
-    const pendingOrders =
-    document.getElementById("pendingOrders");
+    const pending =
+    orders.filter(order=>
 
-    if(totalOrders){
+        order.orderStatus !== "Completed"
 
-        totalOrders.textContent =
-        orders.length;
+    );
 
-    }
-
-    if(pendingOrders){
-
-        const pending =
-        orders.filter(order=>
-
-            order.orderProgress !== "Completed"
-
-        );
-
-        pendingOrders.textContent =
-        pending.length;
-
-    }
+    document.getElementById("pendingOrders").textContent =
+    pending.length;
 
 }
 
@@ -470,7 +494,7 @@ function updateStats(){
 // DUE DATES
 // ======================================
 
-function calculateDueDates(){
+unction calculateDueDates(){
 
     const today =
     new Date();
