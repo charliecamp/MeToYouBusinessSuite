@@ -490,3 +490,528 @@ src="js/order-details.js">
 
 </html>
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Order Details | Me To You Designs</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="css/order-details.css">
+
+</head>
+
+<body>
+
+<div class="page">
+
+<header class="pageHeader">
+
+<button
+class="backButton"
+onclick="location.href='orders.html'">
+
+←
+
+</button>
+
+<img
+src="logo.PNG"
+class="logo"
+alt="Logo">
+
+<h1>
+
+Order Details
+
+</h1>
+
+<p>
+
+Customer Job File
+
+</p>
+
+</header>
+
+<!-- ORDER SUMMARY -->
+
+<section class="card summaryCard">
+
+<h2 id="orderHeading">
+
+Loading Order...
+
+</h2>
+
+<p id="orderCustomer">
+
+Loading Customer...
+
+</p>
+
+<div
+id="summaryStatus"
+class="statusBadge">
+
+New Order
+
+</div>
+
+<div class="summaryGrid">
+
+<div class="summaryBox">
+
+<h4>
+
+Due Date
+
+</h4>
+
+<p id="summaryDue">
+
+-
+
+</p>
+
+</div>
+
+<div class="summaryBox">
+
+<h4>
+
+Order Total
+
+</h4>
+
+<p id="summaryTotal">
+
+£0.00
+
+</p>
+
+</div>
+
+<div class="summaryBox">
+
+<h4>
+
+Paid
+
+</h4>
+
+<p id="summaryPaid">
+
+£0.00
+
+</p>
+
+</div>
+
+<div class="summaryBox">
+
+<h4>
+
+Remaining
+
+</h4>
+
+<p id="summaryRemaining">
+
+£0.00
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- CUSTOMER DETAILS -->
+
+<section class="card">
+
+<div class="sectionHeader">
+
+<h2>
+
+👤 Customer Details
+
+</h2>
+
+</div>
+
+<div id="customerContent">
+
+</div>
+
+</section>
+
+<!-- ORDER ITEMS -->
+
+<section class="card">
+
+<div class="sectionHeader">
+
+<h2>
+
+📦 Order Items
+
+</h2>
+
+<button
+id="addItemButton"
+class="smallButton">
+
+＋ Add Item
+
+</button>
+
+</div>
+
+<div id="itemsContent">
+
+</div>
+
+</section>
+
+<!-- CUSTOMER PHOTOS -->
+
+<section class="card">
+
+<div class="sectionHeader">
+
+<h2>
+
+📸 Customer Photos
+
+</h2>
+
+<label
+for="photoUpload"
+class="smallButton">
+
+＋ Upload Photos
+
+</label>
+
+<input
+type="file"
+id="photoUpload"
+accept="image/*"
+multiple
+hidden>
+
+</div>
+
+<p class="sectionText">
+
+Upload inspiration photos, customer proofs and finished product photos.
+
+</p>
+
+<div
+id="photoGallery"
+class="photoGrid">
+
+<div class="emptyState">
+
+No photos uploaded yet.
+
+</div>
+
+</div>
+
+</section>
+
+<!-- PAYMENT -->
+
+<section class="card">
+
+<div class="sectionHeader">
+
+<h2>
+
+💷 Payments
+
+</h2>
+
+<button
+id="addPaymentButton"
+class="smallButton">
+
+＋ Add Payment
+
+</button>
+
+</div>
+
+<div class="summaryGrid">
+
+<div class="summaryBox">
+
+<h4>
+
+Order Total
+
+</h4>
+
+<p id="paymentTotal">
+
+£0.00
+
+</p>
+
+</div>
+
+<div class="summaryBox">
+
+<h4>
+
+Paid
+
+</h4>
+
+<p id="paymentPaid">
+
+£0.00
+
+</p>
+
+</div>
+
+<div class="summaryBox">
+
+<h4>
+
+Remaining
+
+</h4>
+
+<p id="paymentRemaining">
+
+£0.00
+
+</p>
+
+</div>
+
+<div class="summaryBox">
+
+<h4>
+
+Status
+
+</h4>
+
+<p id="paymentStatus">
+
+Not Paid
+
+</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<h3>
+
+Payment History
+
+</h3>
+
+<div id="paymentHistory">
+
+<div class="emptyState">
+
+No payments recorded.
+
+</div>
+
+</div>
+
+</section>
+
+<!-- COLLECTION / DELIVERY -->
+
+<section class="card">
+
+<div class="sectionHeader">
+
+<h2>
+
+🚚 Collection / Delivery
+
+</h2>
+
+</div>
+
+<div id="deliveryContent">
+
+</div>
+
+</section>
+
+<!-- ORDER NOTES -->
+
+<section class="card">
+
+<div class="sectionHeader">
+
+<h2>
+
+📝 Order Notes
+
+</h2>
+
+</div>
+
+<textarea
+id="orderNotes"
+rows="6"
+placeholder="Add notes about this order..."></textarea>
+
+</section>
+
+<!-- ORDER PROGRESS -->
+
+<section class="card">
+
+<div class="sectionHeader">
+
+<h2>
+
+✨ Order Progress
+
+</h2>
+
+</div>
+
+<select id="orderStatus">
+
+<option>New Order</option>
+
+<option>Awaiting Approval</option>
+
+<option>Making</option>
+
+<option>Ready for Collection</option>
+
+<option>Completed</option>
+
+<option>Cancelled</option>
+
+</select>
+
+<div class="progressSteps">
+
+<div class="step active">
+
+📝
+
+<span>New</span>
+
+</div>
+
+<div class="step">
+
+🎨
+
+<span>Design</span>
+
+</div>
+
+<div class="step">
+
+🔨
+
+<span>Making</span>
+
+</div>
+
+<div class="step">
+
+📦
+
+<span>Ready</span>
+
+</div>
+
+<div class="step">
+
+✅
+
+<span>Complete</span>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ACTIONS -->
+
+<section class="card actionCard">
+
+<button
+id="saveChanges"
+class="primaryButton">
+
+💗 Save Changes
+
+</button>
+
+<div class="buttonRow">
+
+<button
+id="duplicateOrder"
+class="secondaryButton">
+
+📄 Duplicate Order
+
+</button>
+
+<button
+id="deleteOrder"
+class="dangerButton">
+
+🗑 Delete Order
+
+</button>
+
+</div>
+
+</section>
+
+</div>
+
+<script
+type="module"
+src="js/order-details.js">
+
+</script>
+
+</body>
+
+</html>
