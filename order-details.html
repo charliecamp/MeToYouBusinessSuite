@@ -18,7 +18,7 @@ href="https://fonts.googleapis.com">
 href="https://fonts.gstatic.com"
 crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap"
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap"
 rel="stylesheet">
 
 <link
@@ -31,7 +31,7 @@ href="css/order-details.css">
 
 <div class="page">
 
-<header>
+<header class="pageHeader">
 
 <button
 class="backButton"
@@ -50,7 +50,7 @@ alt="Logo">
 
 <p>
 
-View and manage this customer order.
+Everything for this customer in one place.
 
 </p>
 
@@ -66,19 +66,22 @@ Loading Order...
 
 </h2>
 
-<p id="orderCustomer"></p>
+<p id="orderCustomer">
 
-<div class="summaryGrid">
+Loading customer...
 
-<div class="summaryBox">
+</p>
 
-<h4>Status</h4>
+<div class="statusBadge"
+id="summaryStatus">
 
-<p id="summaryStatus">-</p>
+New Order
 
 </div>
 
-<div class="summaryBox">
+<div class="summaryGrid">
+
+<div class="summaryItem">
 
 <h4>Due Date</h4>
 
@@ -86,7 +89,7 @@ Loading Order...
 
 </div>
 
-<div class="summaryBox">
+<div class="summaryItem">
 
 <h4>Total</h4>
 
@@ -94,7 +97,15 @@ Loading Order...
 
 </div>
 
-<div class="summaryBox">
+<div class="summaryItem">
+
+<h4>Paid</h4>
+
+<p id="summaryPaid">£0.00</p>
+
+</div>
+
+<div class="summaryItem">
 
 <h4>Remaining</h4>
 
@@ -110,53 +121,255 @@ Loading Order...
 
 <section class="card">
 
-<h2>👤 Customer Details</h2>
+<div class="sectionHeader">
 
-<div id="customerContent">
+<h2>
 
-<p>Loading customer...</p>
+👤 Customer Details
+
+</h2>
+
+<button
+type="button"
+class="editSectionButton">
+
+✏️
+
+</button>
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Customer Name
+
+</label>
+
+<input
+type="text"
+id="customerName">
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Contact Number
+
+</label>
+
+<input
+type="text"
+id="customerContact">
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Order Source
+
+</label>
+
+<select id="orderSource">
+
+<option>Facebook</option>
+
+<option>Instagram</option>
+
+<option>TikTok</option>
+
+<option>Website</option>
+
+<option>Returning Customer</option>
+
+<option>Recommendation</option>
+
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Social Username
+
+</label>
+
+<input
+type="text"
+id="socialUsername">
 
 </div>
 
 </section>
 
-<!-- ITEMS -->
+<!-- ORDER ITEMS -->
 
 <section class="card">
 
-<h2>📦 Order Items</h2>
+<div class="sectionHeader">
 
-<div id="itemsContent">
+<h2>
 
-<p>Loading items...</p>
+📦 Order Items
+
+</h2>
+
+<button
+type="button"
+id="addItemButton">
+
+＋ Add Item
+
+</button>
+
+</div>
+
+<div id="itemsContainer">
 
 </div>
 
 </section>
 
-<!-- PAYMENTS -->
+<!-- PAYMENT -->
 
 <section class="card">
 
-<h2>💷 Payments</h2>
+<div class="sectionHeader">
 
-<div id="paymentsContent">
+<h2>
 
-<p>Loading payments...</p>
+💷 Payment
+
+</h2>
+
+<button
+type="button"
+id="addPaymentButton">
+
+＋
+
+<!-- COLLECTION / DELIVERY -->
+
+<section class="card">
+
+<div class="sectionHeader">
+
+<h2>
+
+🚚 Collection / Delivery
+
+</h2>
 
 </div>
 
-</section>
+<div class="formGroup">
 
-<!-- DELIVERY -->
+<label>
 
-<section class="card">
+Delivery Method
 
-<h2>🚚 Delivery</h2>
+</label>
 
-<div id="deliveryContent">
+<select id="deliveryMethod">
 
-<p>Loading delivery details...</p>
+<option>Collection</option>
+
+<option>Delivery</option>
+
+</select>
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Date Needed
+
+</label>
+
+<input
+type="date"
+id="dateNeeded">
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Address Line 1
+
+</label>
+
+<input
+type="text"
+id="address1">
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Address Line 2
+
+</label>
+
+<input
+type="text"
+id="address2">
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Town / City
+
+</label>
+
+<input
+type="text"
+id="town">
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+County
+
+</label>
+
+<input
+type="text"
+id="county">
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Postcode
+
+</label>
+
+<input
+type="text"
+id="postcode">
 
 </div>
 
@@ -166,89 +379,102 @@ Loading Order...
 
 <section class="card">
 
-<h2>📝 Order Notes</h2>
+<div class="sectionHeader">
 
-<div id="notesContent">
+<h2>
 
-<p>No notes added.</p>
+📝 Order Notes
+
+</h2>
 
 </div>
 
+<textarea
+id="orderNotes"
+rows="6"
+placeholder="Add any notes about this order..."></textarea>
+
 </section>
 
-<!-- CUSTOMER IMAGES -->
+<!-- ORDER PROGRESS -->
 
 <section class="card">
 
-<h2>📸 Customer Images</h2>
+<div class="sectionHeader">
 
-<div id="imagesContent">
+<h2>
 
-<p>No images uploaded.</p>
+✨ Order Progress
+
+</h2>
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Current Status
+
+</label>
+
+<select id="orderStatus">
+
+<option>New Order</option>
+
+<option>Awaiting Approval</option>
+
+<option>Making</option>
+
+<option>Ready for Collection</option>
+
+<option>Completed</option>
+
+<option>Cancelled</option>
+
+</select>
+
+</div>
+
+<div class="progressBar">
+
+<div id="progressFill"></div>
 
 </div>
 
 </section>
 
-<!-- ORDER STATUS -->
+<!-- ACTIONS -->
 
-<section class="card">
-
-<h2>✨ Order Status</h2>
-
-<div id="statusContent">
-
-<p>Loading status...</p>
-
-</div>
-
-</section>
-<!-- ACTION BUTTONS -->
-
-<section class="card actionButtons">
+<section class="card actionCard">
 
 <button
-type="button"
-id="editOrder">
-
-✏️ Edit Order
-
-</button>
-
-<button
-type="button"
 id="saveChanges"
-style="display:none;">
+class="primaryButton">
 
-💾 Save Changes
+💗 Save Changes
+
+</button>
+
+<div class="buttonRow">
+
+<button
+id="duplicateOrder"
+class="secondaryButton">
+
+📄 Duplicate
 
 </button>
 
 <button
-type="button"
-id="cancelEdit"
-style="display:none;">
-
-❌ Cancel
-
-</button>
-
-<button
-type="button"
-id="duplicateOrder">
-
-📄 Duplicate Order
-
-</button>
-
-<button
-type="button"
 id="deleteOrder"
-class="deleteButton">
+class="dangerButton">
 
-🗑 Delete Order
+🗑 Delete
 
 </button>
+
+</div>
 
 </section>
 
@@ -263,3 +489,4 @@ src="js/order-details.js">
 </body>
 
 </html>
+
