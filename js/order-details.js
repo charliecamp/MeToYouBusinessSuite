@@ -2,9 +2,7 @@ import { db } from "./firebase.js";
 
 import {
     doc,
-    getDoc,
-    updateDoc,
-    deleteDoc
+    getDoc
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
 // =====================================
@@ -60,37 +58,24 @@ document.getElementById("imagesContent");
 const statusContent =
 document.getElementById("statusContent");
 
-const editOrderButton =
+const editOrder =
 document.getElementById("editOrder");
 
-const saveChangesButton =
+const saveChanges =
 document.getElementById("saveChanges");
 
-const cancelEditButton =
+const cancelEdit =
 document.getElementById("cancelEdit");
 
-const duplicateOrderButton =
+const duplicateOrder =
 document.getElementById("duplicateOrder");
 
-const deleteOrderButton =
+const deleteOrder =
 document.getElementById("deleteOrder");
-
-// =====================================
-// VARIABLES
-// =====================================
 
 let currentOrder = null;
 
-let editing = false;
-
-// =====================================
-// LOAD ORDER
-// =====================================
-
-window.addEventListener(
-"DOMContentLoaded",
-loadOrder
-);
+loadOrder();
 
 async function loadOrder(){
 
@@ -121,13 +106,7 @@ async function loadOrder(){
 
         }
 
-        currentOrder = {
-
-            id: snapshot.id,
-
-            ...snapshot.data()
-
-        };
+        currentOrder = snapshot.data();
 
         displayOrder();
 
@@ -149,7 +128,7 @@ async function loadOrder(){
 
 function displayOrder(){
 
-    // ---------- ORDER SUMMARY ----------
+    // ---------- SUMMARY ----------
 
     orderHeading.textContent =
     `❤️ ${currentOrder.orderNumber || "No Order Number"}`;
@@ -182,7 +161,7 @@ function displayOrder(){
     <p><strong>Order Source</strong></p>
     <p>${currentOrder.orderSource || "-"}</p>
 
-    <p><strong>Username</strong></p>
+    <p><strong>Social Username</strong></p>
     <p>${currentOrder.socialUsername || "-"}</p>
 
     `;
@@ -191,12 +170,7 @@ function displayOrder(){
 
     itemsContent.innerHTML = "";
 
-    if(!currentOrder.items || currentOrder.items.length===0){
-
-        itemsContent.innerHTML =
-        "<p>No items added.</p>";
-
-    }else{
+    if(currentOrder.items && currentOrder.items.length){
 
         currentOrder.items.forEach(item=>{
 
@@ -204,13 +178,13 @@ function displayOrder(){
 
             <div class="itemCard">
 
-                <h4>${item.product || "Product"}</h4>
+                <h3>${item.product || "Product"}</h3>
 
                 <p><strong>Quantity:</strong> ${item.quantity || 1}</p>
 
                 <p><strong>Unit Price:</strong> £${Number(item.unitPrice || 0).toFixed(2)}</p>
 
-                <p><strong>Item Total:</strong> £${Number(item.itemTotal || 0).toFixed(2)}</p>
+                <p><strong>Total:</strong> £${Number(item.itemTotal || 0).toFixed(2)}</p>
 
                 <p><strong>Size:</strong> ${item.size || "-"}</p>
 
@@ -218,13 +192,19 @@ function displayOrder(){
 
                 <p><strong>Personalised:</strong> ${item.personalised || "No"}</p>
 
-                <p><strong>Personalisation:</strong> ${item.personalisation || "-"}</p>
+                <p><strong>Personalisation:</strong><br>
+                ${item.personalisation || "-"}</p>
 
             </div>
 
             `;
 
         });
+
+    }else{
+
+        itemsContent.innerHTML =
+        "<p>No items added.</p>";
 
     }
 
@@ -292,7 +272,7 @@ function displayOrder(){
 
     <p>
 
-    Image gallery coming soon.
+    Customer image gallery coming soon.
 
     </p>
 
@@ -302,106 +282,8 @@ function displayOrder(){
 
     statusContent.innerHTML = `
 
-    <p>
-
-    <strong>${currentOrder.orderStatus || "New Order"}</strong>
-
-    </p>
+    <h3>${currentOrder.orderStatus || "New Order"}</h3>
 
     `;
 
 }
-
-// =====================================
-// BUTTONS
-// =====================================
-
-// ---------- EDIT ----------
-
-editOrderButton.addEventListener("click",()=>{
-
-    editing = true;
-
-    editOrderButton.style.display = "none";
-
-    saveChangesButton.style.display = "inline-block";
-
-    cancelEditButton.style.display = "inline-block";
-
-    alert(
-        "Edit Mode will be completed next."
-    );
-
-});
-
-// ---------- CANCEL ----------
-
-cancelEditButton.addEventListener("click",()=>{
-
-    editing = false;
-
-    saveChangesButton.style.display = "none";
-
-    cancelEditButton.style.display = "none";
-
-    editOrderButton.style.display = "inline-block";
-
-    displayOrder();
-
-});
-
-// ---------- SAVE ----------
-
-saveChangesButton.addEventListener("click",async()=>{
-
-    alert(
-        "Saving will be added next."
-    );
-
-});
-
-// ---------- DELETE ----------
-
-deleteOrderButton.addEventListener("click",async()=>{
-
-    const confirmDelete =
-    confirm(
-        "Are you sure you want to delete this order?"
-    );
-
-    if(!confirmDelete) return;
-
-    try{
-
-        await deleteDoc(
-            doc(db,"orders",orderId)
-        );
-
-        alert(
-            "Order deleted successfully."
-        );
-
-        window.location.href =
-        "orders.html";
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        alert(error.message);
-
-    }
-
-});
-
-// ---------- DUPLICATE ----------
-
-duplicateOrderButton.addEventListener("click",()=>{
-
-    alert(
-        "Duplicate Order coming next."
-    );
-
-});
