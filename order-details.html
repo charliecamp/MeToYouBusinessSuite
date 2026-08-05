@@ -6,10 +6,14 @@
 <meta charset="UTF-8">
 
 <meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
-<title>Order Details | Me To You Designs</title>
+<title>
+
+    Order Details | Me To You Designs
+
+</title>
 
 <link rel="preconnect"
 href="https://fonts.googleapis.com">
@@ -18,7 +22,7 @@ href="https://fonts.googleapis.com">
 href="https://fonts.gstatic.com"
 crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap"
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap"
 rel="stylesheet">
 
 <link
@@ -36,7 +40,7 @@ href="css/order-details.css">
 <button
 type="button"
 class="back-button"
-onclick="location.href='orders.html'">
+onclick="window.location.href='orders.html'">
 
 ←
 
@@ -53,19 +57,17 @@ Order Details
 
 </h1>
 
-<div class="heart">
-
-♡
-
-</div>
-
 <p>
 
-View, edit and manage this customer order.
+View and manage your customer order
 
 </p>
 
 </header>
+
+<!-- =====================================
+SUMMARY
+===================================== -->
 
 <section class="card summaryCard">
 
@@ -75,13 +77,13 @@ View, edit and manage this customer order.
 
 <h2 id="orderNumber">
 
-MTYD-00001
+Loading...
 
 </h2>
 
 <p id="customerNameSummary">
 
-Customer Name
+Loading...
 
 </p>
 
@@ -103,7 +105,7 @@ New Order
 
 <h4>
 
-Created
+Order Date
 
 </h4>
 
@@ -167,7 +169,9 @@ Remaining
 
 </section>
 
-<!-- CUSTOMER DETAILS -->
+<!-- =====================================
+CUSTOMER DETAILS
+===================================== -->
 
 <section class="card">
 
@@ -178,15 +182,6 @@ Remaining
 👤 Customer Details
 
 </h2>
-
-<button
-type="button"
-id="editCustomerButton"
-class="smallButton">
-
-✏️ Edit
-
-</button>
 
 </div>
 
@@ -201,9 +196,8 @@ Customer Name
 </label>
 
 <input
-id="customerName"
 type="text"
-placeholder="Customer name">
+id="customerName">
 
 </div>
 
@@ -216,9 +210,8 @@ Contact Number
 </label>
 
 <input
-id="customerContact"
 type="text"
-placeholder="Phone number">
+id="customerContact">
 
 </div>
 
@@ -242,9 +235,9 @@ Order Source
 
 <option>Website</option>
 
-<option>Recommendation</option>
-
 <option>Returning Customer</option>
+
+<option>Recommendation</option>
 
 <option>Other</option>
 
@@ -261,9 +254,8 @@ Social Username
 </label>
 
 <input
-id="socialUsername"
 type="text"
-placeholder="@username">
+id="socialUsername">
 
 </div>
 
@@ -271,7 +263,9 @@ placeholder="@username">
 
 </section>
 
-<!-- ORDER ITEMS -->
+<!-- =====================================
+ORDER ITEMS
+===================================== -->
 
 <section class="card">
 
@@ -296,13 +290,13 @@ class="smallButton">
 
 <div id="itemsContainer">
 
-<!-- Items load here -->
-
 </div>
 
 </section>
 
-<!-- CUSTOMER PHOTOS -->
+<!-- =====================================
+CUSTOMER PHOTOS
+===================================== -->
 
 <section class="card">
 
@@ -346,7 +340,9 @@ No customer photos uploaded.
 
 </section>
 
-<!-- PAYMENTS -->
+<!-- =====================================
+PAYMENTS
+===================================== -->
 
 <section class="card">
 
@@ -363,7 +359,7 @@ type="button"
 id="addPaymentButton"
 class="smallButton">
 
-💗 Add Payment
+➕ Add Payment
 
 </button>
 
@@ -421,27 +417,110 @@ Not Paid
 
 </div>
 
-<h3>
-
-Payment History
-
-</h3>
-
 <div
 id="paymentHistory"
 class="historyContainer">
 
 <p class="emptyMessage">
 
-No payments recorded yet.
+No payments recorded.
 
 </p>
 
 </div>
 
+<div
+id="paymentForm"
+style="display:none;">
+
+<div class="detailsGrid">
+
+<div class="formGroup">
+
+<label>
+
+Payment Date
+
+</label>
+
+<input
+type="date"
+id="paymentDate">
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Amount (£)
+
+</label>
+
+<input
+type="number"
+id="paymentAmount"
+step="0.01"
+min="0">
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Payment Method
+
+</label>
+
+<select id="paymentMethod">
+
+<option>Cash</option>
+
+<option>Bank Transfer</option>
+
+<option>Card</option>
+
+<option>PayPal</option>
+
+<option>Other</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="formGroup">
+
+<label>
+
+Payment Notes
+
+</label>
+
+<textarea
+id="paymentNotes"
+rows="3"></textarea>
+
+</div>
+
+<button
+type="button"
+id="savePaymentButton"
+class="primaryButton">
+
+💷 Save Payment
+
+</button>
+
+</div>
+
 </section>
 
-<!-- COLLECTION / DELIVERY -->
+<!-- =====================================
+DELIVERY
+===================================== -->
 
 <section class="card">
 
@@ -449,18 +528,9 @@ No payments recorded yet.
 
 <h2>
 
-🚚 Collection / Delivery
+🚚 Delivery / Collection
 
 </h2>
-
-<button
-type="button"
-id="editDeliveryButton"
-class="smallButton">
-
-✏️ Edit
-
-</button>
 
 </div>
 
@@ -499,8 +569,8 @@ Date Needed
 </label>
 
 <input
-id="dateNeeded"
-type="date">
+type="date"
+id="dateNeeded">
 
 </div>
 
@@ -513,8 +583,8 @@ Address Line 1
 </label>
 
 <input
-id="address1"
-type="text">
+type="text"
+id="address1">
 
 </div>
 
@@ -527,8 +597,8 @@ Address Line 2
 </label>
 
 <input
-id="address2"
-type="text">
+type="text"
+id="address2">
 
 </div>
 
@@ -541,8 +611,8 @@ Town / City
 </label>
 
 <input
-id="town"
-type="text">
+type="text"
+id="town">
 
 </div>
 
@@ -555,8 +625,8 @@ County
 </label>
 
 <input
-id="county"
-type="text">
+type="text"
+id="county">
 
 </div>
 
@@ -569,8 +639,8 @@ Postcode
 </label>
 
 <input
-id="postcode"
-type="text">
+type="text"
+id="postcode">
 
 </div>
 
@@ -578,7 +648,9 @@ type="text">
 
 </section>
 
-<!-- ORDER NOTES -->
+<!-- =====================================
+ORDER NOTES
+===================================== -->
 
 <section class="card">
 
@@ -590,25 +662,18 @@ type="text">
 
 </h2>
 
-<button
-type="button"
-id="editNotesButton"
-class="smallButton">
-
-✏️ Edit
-
-</button>
-
 </div>
 
 <textarea
 id="orderNotes"
-rows="6"
-placeholder="Add notes about this order..."></textarea>
+rows="8"
+placeholder="Add any notes about this order..."></textarea>
 
 </section>
 
-<!-- ORDER PROGRESS -->
+<!-- =====================================
+ORDER STATUS
+===================================== -->
 
 <section class="card">
 
@@ -616,11 +681,13 @@ placeholder="Add notes about this order..."></textarea>
 
 <h2>
 
-✨ Order Progress
+✨ Order Status
 
 </h2>
 
 </div>
+
+<div class="formGroup">
 
 <label>
 
@@ -644,9 +711,13 @@ Current Status
 
 </select>
 
+</div>
+
 </section>
 
-<!-- ACTIONS -->
+<!-- =====================================
+ACTIONS
+===================================== -->
 
 <section class="card">
 
@@ -681,6 +752,155 @@ class="dangerButton">
 </div>
 
 </section>
+
+</div>
+
+<!-- =====================================
+PHOTO MODAL
+===================================== -->
+
+<div
+id="photoModal"
+class="photoModal hidden">
+
+<span
+id="closePhotoModal"
+class="closePhoto">
+
+&times;
+
+</span>
+
+<img
+id="photoPreview"
+src=""
+alt="Customer Photo">
+
+</div>
+
+<!-- =====================================
+DELETE MODAL
+===================================== -->
+
+<div
+id="deleteModal"
+class="modal hidden">
+
+<div class="modalCard">
+
+<h2>
+
+Delete Order?
+
+</h2>
+
+<p>
+
+Are you sure you want to permanently delete this order?
+
+</p>
+
+<div class="buttonRow">
+
+<button
+type="button"
+id="cancelDelete">
+
+Cancel
+
+</button>
+
+<button
+type="button"
+id="confirmDelete"
+class="dangerButton">
+
+Delete
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================
+DUPLICATE MODAL
+===================================== -->
+
+<div
+id="duplicateModal"
+class="modal hidden">
+
+<div class="modalCard">
+
+<h2>
+
+Duplicate Order?
+
+</h2>
+
+<p>
+
+A copy of this order will be created.
+
+</p>
+
+<div class="buttonRow">
+
+<button
+type="button"
+id="cancelDuplicate">
+
+Cancel
+
+</button>
+
+<button
+type="button"
+id="confirmDuplicate"
+class="primaryButton">
+
+Duplicate
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================
+LOADING OVERLAY
+===================================== -->
+
+<div
+id="loadingOverlay"
+class="loadingOverlay hidden">
+
+<div class="loadingCard">
+
+<div class="loader"></div>
+
+<p>
+
+Loading Order...
+
+</p>
+
+</div>
+
+</div>
+
+<!-- =====================================
+TOAST
+===================================== -->
+
+<div
+id="toast"
+class="toast">
 
 </div>
 
