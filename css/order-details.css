@@ -1,89 +1,621 @@
+/* ===========================
+   ORDER DETAILS
+=========================== */
+
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
 }
 
 body{
-    font-family:'Poppins',sans-serif;
-    background:#f8f4f7;
-    color:#444;
+
+font-family:'Poppins',sans-serif;
+
+background:linear-gradient(180deg,#fff7fb,#fff);
+
+color:#555;
+
 }
 
 .page{
-    max-width:900px;
-    margin:auto;
-    padding:20px;
+
+max-width:700px;
+
+margin:auto;
+
+padding:25px 18px 60px;
+
 }
 
-header{
-    text-align:center;
-    margin-bottom:25px;
+/* ===========================
+   HEADER
+=========================== */
+
+.order-header{
+
+text-align:center;
+
+margin-bottom:30px;
+
+position:relative;
+
 }
 
-.backButton{
-    float:left;
-    border:none;
-    background:none;
-    font-size:28px;
-    cursor:pointer;
+.back-button{
+
+position:absolute;
+
+left:0;
+
+top:10px;
+
+width:46px;
+
+height:46px;
+
+border:none;
+
+border-radius:14px;
+
+background:white;
+
+font-size:28px;
+
+color:#c96b95;
+
+cursor:pointer;
+
+box-shadow:0 8px 25px rgba(0,0,0,.08);
+
 }
 
 .logo{
-    width:90px;
-    margin:10px auto;
-    display:block;
+
+width:115px;
+
+margin:10px auto;
+
+display:block;
+
 }
 
-h1{
-    font-family:'Great Vibes',cursive;
-    color:#d46a92;
-    font-size:48px;
-    margin-bottom:10px;
+.order-header h1{
+
+font-family:'Great Vibes',cursive;
+
+font-size:68px;
+
+color:#c96b95;
+
+font-weight:400;
+
+margin-top:10px;
+
 }
 
-header p{
-    color:#777;
+.heart{
+
+font-size:34px;
+
+color:#d989b0;
+
+margin:10px 0;
+
 }
+
+.order-header p{
+
+font-size:19px;
+
+color:#777;
+
+line-height:1.6;
+
+}
+
+/* ===========================
+   CARDS
+=========================== */
 
 .card{
-    background:#fff;
-    border-radius:18px;
-    padding:20px;
-    margin-bottom:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+background:white;
+
+border-radius:28px;
+
+padding:24px;
+
+margin-bottom:22px;
+
+box-shadow:0 10px 35px rgba(0,0,0,.06);
+
 }
 
 .card h2{
-    color:#d46a92;
-    margin-bottom:15px;
+
+font-size:22px;
+
+font-weight:700;
+
+color:#c96b95;
+
+margin-bottom:22px;
+
 }
 
-.actionButtons{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
+.cardHeader{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:20px;
+
 }
 
-.actionButtons button{
-    border:none;
-    border-radius:12px;
-    padding:15px;
-    font-size:16px;
-    cursor:pointer;
-    font-weight:600;
+/* ===========================
+   FORMS
+=========================== */
+
+.formGroup{
+
+display:flex;
+
+flex-direction:column;
+
+margin-bottom:18px;
+
 }
 
-#saveChanges{
-    background:#d46a92;
-    color:white;
+.formGroup label{
+
+font-size:15px;
+
+font-weight:600;
+
+color:#6a5a63;
+
+margin-bottom:8px;
+
 }
 
-#duplicateOrder{
-    background:#ffd9e6;
+input,
+select,
+textarea{
+
+width:100%;
+
+padding:16px 18px;
+
+border:2px solid #f3c9dd;
+
+border-radius:18px;
+
+background:#fffafd;
+
+font-family:'Poppins',sans-serif;
+
+font-size:16px;
+
+color:#555;
+
+outline:none;
+
+transition:.25s;
+
 }
 
-#deleteOrder{
-    background:#ff4d6d;
-    color:white;
+input:focus,
+select:focus,
+textarea:focus{
+
+border-color:#cf7fa7;
+
+background:white;
+
+box-shadow:0 0 0 5px rgba(207,127,167,.12);
+
+}
+
+textarea{
+
+resize:vertical;
+
+min-height:120px;
+
+}
+
+.detailsGrid{
+
+display:grid;
+
+grid-template-columns:1fr;
+
+gap:18px;
+
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+
+.primaryButton{
+
+width:100%;
+
+padding:18px;
+
+border:none;
+
+border-radius:22px;
+
+background:linear-gradient(135deg,#d57ba6,#c46693);
+
+color:white;
+
+font-size:18px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.25s;
+
+box-shadow:0 12px 25px rgba(201,107,149,.25);
+
+}
+
+.primaryButton:hover{
+
+transform:translateY(-2px);
+
+}
+
+.smallButton{
+
+padding:10px 18px;
+
+border:none;
+
+border-radius:14px;
+
+background:#ffe8f3;
+
+color:#c96b95;
+
+font-size:14px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.smallButton:hover{
+
+background:#ffd8eb;
+
+}
+
+.buttonRow{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:14px;
+
+margin-top:18px;
+
+}
+
+.buttonRow button{
+
+padding:16px;
+
+border:none;
+
+border-radius:18px;
+
+font-size:16px;
+
+font-weight:600;
+
+cursor:pointer;
+
+background:#ffeaf4;
+
+color:#c96b95;
+
+transition:.25s;
+
+}
+
+.dangerButton{
+
+background:#ff5d79 !important;
+
+color:white !important;
+
+}
+
+/* ===========================
+   SUMMARY CARD
+=========================== */
+
+.summaryTop{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:22px;
+
+}
+
+.summaryTop h2{
+
+margin:0;
+
+font-size:30px;
+
+color:#c96b95;
+
+}
+
+.summaryTop p{
+
+margin-top:6px;
+
+color:#777;
+
+}
+
+.statusBadge{
+
+padding:10px 18px;
+
+border-radius:30px;
+
+background:#ffe7f2;
+
+color:#c96b95;
+
+font-weight:600;
+
+font-size:15px;
+
+}
+
+.summaryGrid{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:14px;
+
+margin-top:18px;
+
+}
+
+.summaryBox{
+
+background:#fff8fc;
+
+border:2px solid #f5d8e6;
+
+border-radius:20px;
+
+padding:18px;
+
+text-align:center;
+
+}
+
+.summaryBox h4{
+
+font-size:14px;
+
+color:#999;
+
+margin-bottom:8px;
+
+}
+
+.summaryBox p{
+
+font-size:20px;
+
+font-weight:700;
+
+color:#555;
+
+}
+
+/* ===========================
+   ITEM CARDS
+=========================== */
+
+.itemCard{
+
+background:#fffafd;
+
+border:2px solid #f5d8e6;
+
+border-radius:22px;
+
+padding:18px;
+
+margin-bottom:18px;
+
+}
+
+.itemCard h3{
+
+color:#c96b95;
+
+font-size:20px;
+
+margin-bottom:16px;
+
+}
+
+.removeItemButton{
+
+width:100%;
+
+margin-top:18px;
+
+padding:14px;
+
+border:none;
+
+border-radius:16px;
+
+background:#ffedf3;
+
+color:#d04c7b;
+
+font-weight:600;
+
+cursor:pointer;
+
+}
+
+/* ===========================
+   PHOTO GALLERY
+=========================== */
+
+.photoGrid{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:12px;
+
+margin-top:18px;
+
+}
+
+.photoGrid img{
+
+width:100%;
+
+aspect-ratio:1;
+
+object-fit:cover;
+
+border-radius:18px;
+
+box-shadow:0 6px 18px rgba(0,0,0,.08);
+
+}
+
+.emptyState{
+
+padding:30px;
+
+text-align:center;
+
+color:#999;
+
+background:#fffafd;
+
+border:2px dashed #f3c9dd;
+
+border-radius:18px;
+
+grid-column:1/-1;
+
+}
+
+/* ===========================
+   PAYMENT ROWS
+=========================== */
+
+.paymentRow{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:14px 0;
+
+border-bottom:1px solid #f2e3eb;
+
+}
+
+.paymentRow:last-child{
+
+border-bottom:none;
+
+}
+
+.paymentRow span{
+
+font-weight:500;
+
+color:#666;
+
+}
+
+.paymentRow strong{
+
+color:#c96b95;
+
+font-size:17px;
+
+}
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media(max-width:650px){
+
+.order-header h1{
+
+font-size:58px;
+
+}
+
+.summaryGrid{
+
+grid-template-columns:1fr;
+
+}
+
+.buttonRow{
+
+grid-template-columns:1fr;
+
+}
+
+.photoGrid{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+.card{
+
+padding:20px;
+
+}
+
 }
