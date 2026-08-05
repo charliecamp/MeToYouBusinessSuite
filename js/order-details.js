@@ -1,3 +1,11 @@
+"use strict";
+
+/* ==========================================
+   ME TO YOU DESIGNS
+   ORDER DETAILS
+   FIREBASE VERSION
+========================================== */
+
 import { db } from "./firebase.js";
 
 import {
@@ -5,121 +13,206 @@ import {
     getDoc,
     updateDoc,
     deleteDoc,
-    serverTimestamp
+    addDoc,
+    collection,
+    serverTimestamp,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
-// =====================================
-// ORDER DETAILS
-// =====================================
+/* ==========================================
+   URL
+========================================== */
 
-const params =
-new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
 
-const orderId =
-params.get("id");
+const orderId = params.get("id");
 
-// =====================================
-// PAGE ELEMENTS
-// =====================================
+if (!orderId) {
 
-const orderHeading =
-document.getElementById("orderHeading");
+    window.location.href = "orders.html";
 
-const orderCustomer =
-document.getElementById("orderCustomer");
+}
 
-const summaryStatus =
-document.getElementById("summaryStatus");
+/* ==========================================
+   DATA
+========================================== */
 
-const summaryDue =
-document.getElementById("summaryDue");
+let order = {};
 
-const summaryTotal =
-document.getElementById("summaryTotal");
+let items = [];
 
-const summaryRemaining =
-document.getElementById("summaryRemaining");
+let payments = [];
 
-const customerContent =
-document.getElementById("customerContent");
+let customerPhotos = [];
 
-const itemsContent =
-document.getElementById("itemsContent");
+let pageChanged = false;
 
-const paymentsContent =
-document.getElementById("paymentsContent");
+let saving = false;
 
-const deliveryContent =
-document.getElementById("deliveryContent");
+/* ==========================================
+   SUMMARY
+========================================== */
 
-const notesContent =
-document.getElementById("notesContent");
+const orderNumber =
+document.getElementById("orderNumber");
 
-const imagesContent =
-document.getElementById("imagesContent");
+const customerNameSummary =
+document.getElementById("customerNameSummary");
 
-const statusContent =
-document.getElementById("statusContent");
+const statusBadge =
+document.getElementById("statusBadge");
 
-const editOrderButton =
-document.getElementById("editOrder");
+const orderDate =
+document.getElementById("orderDate");
+
+const dateNeededSummary =
+document.getElementById("dateNeededSummary");
+
+const orderTotalSummary =
+document.getElementById("orderTotalSummary");
+
+const remainingSummary =
+document.getElementById("remainingSummary");
+
+/* ==========================================
+   CUSTOMER
+========================================== */
+
+const customerName =
+document.getElementById("customerName");
+
+const customerContact =
+document.getElementById("customerContact");
+
+const orderSource =
+document.getElementById("orderSource");
+
+const socialUsername =
+document.getElementById("socialUsername");
+
+/* ==========================================
+   ITEMS
+========================================== */
+
+const itemsContainer =
+document.getElementById("itemsContainer");
+
+const addItemButton =
+document.getElementById("addItemButton");
+
+/* ==========================================
+   PHOTOS
+========================================== */
+
+const uploadPhotosButton =
+document.getElementById("uploadPhotosButton");
+
+const customerImages =
+document.getElementById("customerImages");
+
+const customerGallery =
+document.getElementById("customerGallery");
+
+/* ==========================================
+   PAYMENTS
+========================================== */
+
+const orderTotal =
+document.getElementById("orderTotal");
+
+const totalPaid =
+document.getElementById("totalPaid");
+
+const remainingBalance =
+document.getElementById("remainingBalance");
+
+const paymentStatus =
+document.getElementById("paymentStatus");
+
+const paymentHistory =
+document.getElementById("paymentHistory");
+
+const addPaymentButton =
+document.getElementById("addPaymentButton");
+
+/* ==========================================
+   DELIVERY
+========================================== */
+
+const deliveryMethod =
+document.getElementById("deliveryMethod");
+
+const dateNeeded =
+document.getElementById("dateNeeded");
+
+const address1 =
+document.getElementById("address1");
+
+const address2 =
+document.getElementById("address2");
+
+const town =
+document.getElementById("town");
+
+const county =
+document.getElementById("county");
+
+const postcode =
+document.getElementById("postcode");
+
+/* ==========================================
+   NOTES
+========================================== */
+
+const orderNotes =
+document.getElementById("orderNotes");
+
+/* ==========================================
+   STATUS
+========================================== */
+
+const orderStatus =
+document.getElementById("orderStatus");
+
+/* ==========================================
+   BUTTONS
+========================================== */
 
 const saveChangesButton =
-document.getElementById("saveChanges");
-
-const cancelEditButton =
-document.getElementById("cancelEdit");
+document.getElementById("saveChangesButton");
 
 const duplicateOrderButton =
-document.getElementById("duplicateOrder");
+document.getElementById("duplicateOrderButton");
 
 const deleteOrderButton =
-document.getElementById("deleteOrder");
+document.getElementById("deleteOrderButton");
 
-// =====================================
-// VARIABLES
-// =====================================
+/* ==========================================
+   LOAD ORDER
+========================================== */
 
-let currentOrder = null;
-
-let editing = false;
-
-// =====================================
-// START
-// =====================================
-
-window.addEventListener(
-    "DOMContentLoaded",
-    loadOrder
-);
-
-// =====================================
-// LOAD ORDER
-// =====================================
+loadOrder();
 
 async function loadOrder(){
-
-    if(!orderId){
-
-        alert("Order not found.");
-
-        window.location.href =
-        "orders.html";
-
-        return;
-
-    }
 
     try{
 
         const snapshot =
         await getDoc(
-            doc(db,"orders",orderId)
+
+            doc(
+                db,
+                "orders",
+                orderId
+            )
+
         );
 
         if(!snapshot.exists()){
 
-            alert("Order not found.");
+            alert(
+                "Order not found."
+            );
 
             window.location.href =
             "orders.html";
@@ -128,15 +221,24 @@ async function loadOrder(){
 
         }
 
-        currentOrder = {
+        order = {
 
-            id: snapshot.id,
+            id:snapshot.id,
 
             ...snapshot.data()
 
         };
 
-        displayOrder();
+        items =
+        order.items || [];
+
+        payments =
+        order.payments || [];
+
+        customerPhotos =
+        order.customerPhotos || [];
+
+        populatePage();
 
     }
 
@@ -144,701 +246,924 @@ async function loadOrder(){
 
         console.error(error);
 
-        alert(error.message);
+        alert(
+            "Unable to load order."
+        );
 
     }
 
 }
 
-// =====================================
-// DISPLAY ORDER
-// =====================================
+/* ==========================================
+   POPULATE PAGE
+========================================== */
 
-function displayOrder(){
+function populatePage(){
 
-    // ---------- SUMMARY ----------
+    orderNumber.textContent =
+    order.orderNumber || "";
 
-    orderHeading.textContent =
-    `❤️ ${currentOrder.orderNumber || "No Order Number"}`;
+    customerNameSummary.textContent =
+    order.customerName || "";
 
-    orderCustomer.textContent =
-    currentOrder.customerName || "No Customer";
+    orderDate.textContent =
+    order.orderDate || "--";
 
-    summaryStatus.textContent =
-    currentOrder.orderStatus || "New Order";
+    dateNeededSummary.textContent =
+    order.dateNeeded || "--";
 
-    summaryDue.textContent =
-    currentOrder.dateNeeded || "-";
+    orderTotalSummary.textContent =
+    "£"+
+    Number(
+        order.orderTotal || 0
+    ).toFixed(2);
 
-    summaryTotal.textContent =
-    `£${Number(currentOrder.orderTotal || 0).toFixed(2)}`;
+    remainingSummary.textContent =
+    "£"+
+    Number(
+        order.remainingBalance || 0
+    ).toFixed(2);
 
-    summaryRemaining.textContent =
-    `£${Number(currentOrder.remainingBalance || 0).toFixed(2)}`;
+    customerName.value =
+    order.customerName || "";
 
-    // ---------- CUSTOMER ----------
+    customerContact.value =
+    order.customerContact || "";
 
-    customerContent.innerHTML = `
+    orderSource.value =
+    order.orderSource || "Facebook";
 
-    <div class="infoRow">
+    socialUsername.value =
+    order.socialUsername || "";
 
-        <strong>Name</strong>
+    deliveryMethod.value =
+    order.deliveryMethod || "Collection";
 
-        <p>${currentOrder.customerName || "-"}</p>
+    dateNeeded.value =
+    order.dateNeeded || "";
 
-    </div>
+    address1.value =
+    order.address1 || "";
 
-    <div class="infoRow">
+    address2.value =
+    order.address2 || "";
 
-        <strong>Contact</strong>
+    town.value =
+    order.town || "";
 
-        <p>${currentOrder.customerContact || "-"}</p>
+    county.value =
+    order.county || "";
 
-    </div>
+    postcode.value =
+    order.postcode || "";
 
-    <div class="infoRow">
+    orderNotes.value =
+    order.orderNotes || "";
 
-        <strong>Order Source</strong>
+    orderStatus.value =
+    order.orderStatus || "New Order";
 
-        <p>${currentOrder.orderSource || "-"}</p>
+    orderTotal.textContent =
+    "£"+
+    Number(
+        order.orderTotal || 0
+    ).toFixed(2);
 
-    </div>
+    totalPaid.textContent =
+    "£"+
+    Number(
+        order.totalPaid || 0
+    ).toFixed(2);
 
-    <div class="infoRow">
+    remainingBalance.textContent =
+    "£"+
+    Number(
+        order.remainingBalance || 0
+    ).toFixed(2);
 
-        <strong>Username</strong>
+    paymentStatus.textContent =
+    order.paymentStatus ||
+    "Not Paid";
 
-        <p>${currentOrder.socialUsername || "-"}</p>
+}
 
-    </div>
+/* ==========================================
+   SAVE ORDER
+========================================== */
 
-    `;
+saveChangesButton.addEventListener(
+    "click",
+    saveOrder
+);
 
-    // ---------- ITEMS ----------
+async function saveOrder(){
 
-    itemsContent.innerHTML = "";
+    if(saving){
+        return;
+    }
 
-    if(!currentOrder.items || currentOrder.items.length===0){
+    saving = true;
 
-        itemsContent.innerHTML =
+    try{
 
-        "<p>No items added.</p>";
+        /* Customer */
 
-    }else{
+        order.customerName =
+        customerName.value.trim();
 
-        currentOrder.items.forEach((item,index)=>{
+        order.customerContact =
+        customerContact.value.trim();
 
-            itemsContent.innerHTML += `
+        order.orderSource =
+        orderSource.value;
 
-            <div class="itemCard">
+        order.socialUsername =
+        socialUsername.value.trim();
 
-                <h3>
+        /* Delivery */
+
+        order.deliveryMethod =
+        deliveryMethod.value;
+
+        order.dateNeeded =
+        dateNeeded.value;
+
+        order.address1 =
+        address1.value.trim();
+
+        order.address2 =
+        address2.value.trim();
+
+        order.town =
+        town.value.trim();
+
+        order.county =
+        county.value.trim();
+
+        order.postcode =
+        postcode.value.trim();
+
+        /* Notes */
+
+        order.orderNotes =
+        orderNotes.value.trim();
+
+        /* Status */
+
+        order.orderStatus =
+        orderStatus.value;
+
+        /* Arrays */
+
+        order.items = items;
+
+        order.payments = payments;
+
+        order.customerPhotos =
+        customerPhotos;
+
+        /* Totals */
+
+        order.totalPaid =
+
+        Number(order.totalPaid || 0);
+
+        order.orderTotal =
+
+        Number(order.orderTotal || 0);
+
+        order.remainingBalance =
+
+        order.orderTotal -
+
+        order.totalPaid;
+
+        if(order.totalPaid===0){
+
+            order.paymentStatus =
+            "Not Paid";
+
+        }
+
+        else if(
+
+            order.totalPaid>=
+
+            order.orderTotal
+
+        ){
+
+            order.paymentStatus =
+            "Paid in Full";
+
+        }
+
+        else{
+
+            order.paymentStatus =
+            "Deposit Paid";
+
+        }
+
+        /* Firebase */
+
+        await updateDoc(
+
+            doc(
+                db,
+                "orders",
+                orderId
+            ),
+
+            {
+
+                customerName:
+                order.customerName,
+
+                customerContact:
+                order.customerContact,
+
+                orderSource:
+                order.orderSource,
+
+                socialUsername:
+                order.socialUsername,
+
+                deliveryMethod:
+                order.deliveryMethod,
+
+                dateNeeded:
+                order.dateNeeded,
+
+                address1:
+                order.address1,
+
+                address2:
+                order.address2,
+
+                town:
+                order.town,
+
+                county:
+                order.county,
+
+                postcode:
+                order.postcode,
+
+                orderNotes:
+                order.orderNotes,
+
+                orderStatus:
+                order.orderStatus,
+
+                orderTotal:
+                order.orderTotal,
+
+                totalPaid:
+                order.totalPaid,
+
+                remainingBalance:
+                order.remainingBalance,
+
+                paymentStatus:
+                order.paymentStatus,
+
+                items:
+                order.items,
+
+                payments:
+                order.payments,
+
+                customerPhotos:
+                order.customerPhotos,
+
+                updatedAt:
+                serverTimestamp()
+
+            }
+
+        );
+
+        refreshSummary();
+
+        showToast(
+            "💗 Order saved successfully"
+        );
+
+        pageChanged = false;
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        showToast(
+            "❌ Failed to save order"
+        );
+
+    }
+
+    finally{
+
+        saving = false;
+
+    }
+
+}
+
+/* ==========================================
+   REFRESH SUMMARY
+========================================== */
+
+function refreshSummary(){
+
+    customerNameSummary.textContent =
+    order.customerName;
+
+    dateNeededSummary.textContent =
+    order.dateNeeded || "--";
+
+    orderTotalSummary.textContent =
+    "£"+
+    Number(order.orderTotal)
+    .toFixed(2);
+
+    remainingSummary.textContent =
+    "£"+
+    Number(order.remainingBalance)
+    .toFixed(2);
+
+    orderTotal.textContent =
+    "£"+
+    Number(order.orderTotal)
+    .toFixed(2);
+
+    totalPaid.textContent =
+    "£"+
+    Number(order.totalPaid)
+    .toFixed(2);
+
+    remainingBalance.textContent =
+    "£"+
+    Number(order.remainingBalance)
+    .toFixed(2);
+
+    paymentStatus.textContent =
+    order.paymentStatus;
+
+    updateStatusBadge();
+
+}
+
+/* ==========================================
+   STATUS BADGE
+========================================== */
+
+function updateStatusBadge(){
+
+    statusBadge.className =
+    "statusBadge";
+
+    statusBadge.textContent =
+    order.orderStatus;
+
+    switch(order.orderStatus){
+
+        case "New Order":
+
+            statusBadge.classList.add(
+                "status-new"
+            );
+
+        break;
+
+        case "Designing":
+
+            statusBadge.classList.add(
+                "status-designing"
+            );
+
+        break;
+
+        case "Making":
+
+            statusBadge.classList.add(
+                "status-making"
+            );
+
+        break;
+
+        case "Ready":
+
+            statusBadge.classList.add(
+                "status-ready"
+            );
+
+        break;
+
+        case "Completed":
+
+            statusBadge.classList.add(
+                "status-completed"
+            );
+
+        break;
+
+        case "Cancelled":
+
+            statusBadge.classList.add(
+                "status-cancelled"
+            );
+
+        break;
+
+    }
+
+}
+
+/* ==========================================
+   TOAST
+========================================== */
+
+function showToast(message){
+
+    let toast =
+    document.getElementById("toast");
+
+    if(!toast){
+
+        toast =
+        document.createElement("div");
+
+        toast.id =
+        "toast";
+
+        document.body.appendChild(
+            toast
+        );
+
+    }
+
+    toast.textContent =
+    message;
+
+    toast.style.opacity = "1";
+
+    setTimeout(()=>{
+
+        toast.style.opacity = "0";
+
+    },2500);
+
+}
+
+/* ==========================================
+   ORDER ITEMS
+========================================== */
+
+renderItems();
+
+addItemButton.addEventListener(
+    "click",
+    addNewItem
+);
+
+function addNewItem(){
+
+    items.push({
+
+        product:"",
+        quantity:1,
+        unitPrice:0,
+        itemTotal:0,
+        size:"",
+        colour:"",
+        personalised:"No",
+        personalisation:""
+
+    });
+
+    renderItems();
+
+}
+
+/* ==========================================
+   RENDER ITEMS
+========================================== */
+
+function renderItems(){
+
+    itemsContainer.innerHTML = "";
+
+    if(items.length===0){
+
+        addNewItem();
+
+        return;
+
+    }
+
+    items.forEach((item,index)=>{
+
+        const card =
+        document.createElement("div");
+
+        card.className = "orderItem";
+
+        card.innerHTML = `
+
+        <div class="orderItemHeader">
+
+            <h3>
 
                 Item ${index+1}
 
-                </h3>
+            </h3>
 
-                <p><strong>Product:</strong> ${item.product || "-"}</p>
+            <button
+                class="removeItemButton"
+                data-index="${index}">
 
-                <p><strong>Quantity:</strong> ${item.quantity || 1}</p>
+                🗑
 
-                <p><strong>Unit Price:</strong>
-                £${Number(item.unitPrice || 0).toFixed(2)}</p>
+            </button>
 
-                <p><strong>Item Total:</strong>
-                £${Number(item.itemTotal || 0).toFixed(2)}</p>
+        </div>
 
-                <p><strong>Size:</strong>
-                ${item.size || "-"}</p>
+        <div class="orderItemGrid">
 
-                <p><strong>Colour:</strong>
-                ${item.colour || "-"}</p>
+            <div class="formGroup">
 
-                <p><strong>Personalised:</strong>
-                ${item.personalised || "No"}</p>
+                <label>
 
-                <p><strong>Personalisation:</strong><br>
+                    Product
 
-                ${item.personalisation || "-"}
+                </label>
 
-                </p>
+                <input
+                    class="itemProduct"
+                    value="${item.product || ""}">
 
             </div>
 
-            `;
+            <div class="formGroup">
 
-        });
+                <label>
 
-    }
+                    Quantity
 
-    // ---------- PAYMENTS ----------
+                </label>
 
-    paymentsContent.innerHTML = `
+                <input
+                    class="itemQuantity"
+                    type="number"
+                    min="1"
+                    value="${item.quantity || 1}">
 
-    <div class="infoRow">
+            </div>
 
-        <strong>Order Total</strong>
+            <div class="formGroup">
 
-        <p>£${Number(currentOrder.orderTotal || 0).toFixed(2)}</p>
+                <label>
 
-    </div>
+                    Unit Price (£)
 
-    <div class="infoRow">
+                </label>
 
-        <strong>Total Paid</strong>
+                <input
+                    class="itemPrice"
+                    type="number"
+                    step="0.01"
+                    value="${item.unitPrice || 0}">
 
-        <p>£${Number(currentOrder.totalPaid || 0).toFixed(2)}</p>
+            </div>
 
-    </div>
+            <div class="formGroup">
 
-    <div class="infoRow">
+                <label>
 
-        <strong>Remaining Balance</strong>
+                    Item Total (£)
 
-        <p>£${Number(currentOrder.remainingBalance || 0).toFixed(2)}</p>
+                </label>
 
-    </div>
+                <input
+                    class="itemTotal"
+                    readonly
+                    value="${Number(item.itemTotal || 0).toFixed(2)}">
 
-    <div class="infoRow">
+            </div>
 
-        <strong>Payment Status</strong>
+            <div class="formGroup">
 
-        <p>${currentOrder.paymentStatus || "Not Paid"}</p>
+                <label>
 
-    </div>
+                    Size
 
-    `;
+                </label>
 
-    // ---------- DELIVERY ----------
+                <input
+                    class="itemSize"
+                    value="${item.size || ""}">
 
-    deliveryContent.innerHTML = `
+            </div>
 
-    <div class="infoRow">
+            <div class="formGroup">
 
-        <strong>Delivery Method</strong>
+                <label>
 
-        <p>${currentOrder.deliveryMethod || "Collection"}</p>
+                    Colour
 
-    </div>
+                </label>
 
-    <div class="infoRow">
+                <input
+                    class="itemColour"
+                    value="${item.colour || ""}">
 
-        <strong>Date Needed</strong>
+            </div>
 
-        <p>${currentOrder.dateNeeded || "-"}</p>
+            <div class="formGroup">
 
-    </div>
+                <label>
 
-    <div class="infoRow">
+                    Personalised
 
-        <strong>Address</strong>
+                </label>
 
-        <p>
+                <select class="itemPersonalised">
 
-        ${currentOrder.address1 || ""}<br>
+                    <option value="No"
+                    ${item.personalised==="No" ? "selected" : ""}>
 
-        ${currentOrder.address2 || ""}<br>
+                        No
 
-        ${currentOrder.town || ""}<br>
+                    </option>
 
-        ${currentOrder.county || ""}<br>
+                    <option value="Yes"
+                    ${item.personalised==="Yes" ? "selected" : ""}>
 
-        ${currentOrder.postcode || ""}
+                        Yes
 
-        </p>
+                    </option>
 
-    </div>
+                </select>
 
-    `;
+            </div>
 
-    // ---------- NOTES ----------
+            <div
+                class="formGroup personalisationBox"
+                style="${
+                    item.personalised==="Yes"
+                    ? "display:block"
+                    : "display:none"
+                }">
 
-    notesContent.innerHTML = `
+                <label>
 
-    <p>
+                    Personalisation
 
-    ${currentOrder.orderNotes || "No notes added."}
+                </label>
 
-    </p>
+                <input
+                    class="itemPersonalisation"
+                    value="${item.personalisation || ""}">
 
-    `;
-
-    // ---------- IMAGES ----------
-
-    imagesContent.innerHTML = `
-
-    <p>
-
-    No customer images uploaded yet.
-
-    </p>
-
-    `;
-
-    // ---------- STATUS ----------
-
-    statusContent.innerHTML = `
-
-    <h3>
-
-    ${currentOrder.orderStatus || "New Order"}
-
-    </h3>
-
-    `;
-
-}
-
-// =====================================
-// EDIT MODE
-// =====================================
-
-editOrderButton.addEventListener(
-"click",
-enterEditMode
-);
-
-cancelEditButton.addEventListener(
-"click",
-()=>{
-
-    editing = false;
-
-    editOrderButton.style.display =
-    "inline-block";
-
-    saveChangesButton.style.display =
-    "none";
-
-    cancelEditButton.style.display =
-    "none";
-
-    displayOrder();
-
-}
-);
-
-function enterEditMode(){
-
-    editing = true;
-
-    editOrderButton.style.display =
-    "none";
-
-    saveChangesButton.style.display =
-    "inline-block";
-
-    cancelEditButton.style.display =
-    "inline-block";
-
-    customerContent.innerHTML = `
-
-<label>Customer Name</label>
-
-<input
-id="editCustomerName"
-type="text"
-value="${currentOrder.customerName || ""}">
-
-<label>Contact Number</label>
-
-<input
-id="editCustomerContact"
-type="text"
-value="${currentOrder.customerContact || ""}">
-
-<label>Order Source</label>
-
-<select id="editOrderSource">
-
-<option value="Facebook"
-${currentOrder.orderSource==="Facebook"?"selected":""}>
-Facebook
-</option>
-
-<option value="Instagram"
-${currentOrder.orderSource==="Instagram"?"selected":""}>
-Instagram
-</option>
-
-<option value="TikTok"
-${currentOrder.orderSource==="TikTok"?"selected":""}>
-TikTok
-</option>
-
-<option value="Website"
-${currentOrder.orderSource==="Website"?"selected":""}>
-Website
-</option>
-
-<option value="Returning Customer"
-${currentOrder.orderSource==="Returning Customer"?"selected":""}>
-Returning Customer
-</option>
-
-</select>
-
-<label>Social Username</label>
-
-<input
-id="editUsername"
-type="text"
-value="${currentOrder.socialUsername || ""}">
-
-`;
-
-    // ---------- ITEMS ----------
-
-    itemsContent.innerHTML = "";
-
-    (currentOrder.items || []).forEach((item,index)=>{
-
-        itemsContent.innerHTML += `
-
-        <div class="itemCard">
-
-            <h3>Item ${index + 1}</h3>
-
-            <label>Product</label>
-
-            <input
-            class="editProduct"
-            type="text"
-            value="${item.product || ""}">
-
-            <label>Quantity</label>
-
-            <input
-            class="editQuantity"
-            type="number"
-            value="${item.quantity || 1}">
-
-            <label>Unit Price (£)</label>
-
-            <input
-            class="editUnitPrice"
-            type="number"
-            step="0.01"
-            value="${item.unitPrice || 0}">
-
-            <label>Size</label>
-
-            <input
-            class="editSize"
-            type="text"
-            value="${item.size || ""}">
-
-            <label>Colour</label>
-
-            <input
-            class="editColour"
-            type="text"
-            value="${item.colour || ""}">
-
-            <label>Personalised</label>
-
-            <select class="editPersonalised">
-
-                <option value="No"
-                ${item.personalised==="No"?"selected":""}>
-                No
-                </option>
-
-                <option value="Yes"
-                ${item.personalised==="Yes"?"selected":""}>
-                Yes
-                </option>
-
-            </select>
-
-            <label>Personalisation</label>
-
-            <textarea
-            class="editPersonalisation">${item.personalisation || ""}</textarea>
+            </div>
 
         </div>
 
         `;
 
+        itemsContainer.appendChild(card);
+
     });
 
-    // ---------- PAYMENTS ----------
-
-    paymentsContent.innerHTML = `
-
-    <label>Order Total (£)</label>
-
-    <input
-    id="editOrderTotal"
-    type="number"
-    step="0.01"
-    value="${currentOrder.orderTotal || 0}">
-
-    <label>Total Paid (£)</label>
-
-    <input
-    id="editTotalPaid"
-    type="number"
-    step="0.01"
-    value="${currentOrder.totalPaid || 0}">
-
-    <label>Remaining Balance (£)</label>
-
-    <input
-    id="editRemainingBalance"
-    type="number"
-    step="0.01"
-    value="${currentOrder.remainingBalance || 0}">
-
-    <label>Payment Status</label>
-
-    <select id="editPaymentStatus">
-
-        <option value="Not Paid">Not Paid</option>
-
-        <option value="Part Paid">Part Paid</option>
-
-        <option value="Paid">Paid</option>
-
-    </select>
-
-    `;
-
-    document.getElementById("editPaymentStatus").value =
-    currentOrder.paymentStatus || "Not Paid";
-
-    // ---------- DELIVERY ----------
-
-    deliveryContent.innerHTML = `
-
-    <label>Delivery Method</label>
-
-    <select id="editDeliveryMethod">
-
-        <option value="Collection">Collection</option>
-
-        <option value="Delivery">Delivery</option>
-
-    </select>
-
-    <label>Date Needed</label>
-
-    <input
-    id="editDateNeeded"
-    type="date"
-    value="${currentOrder.dateNeeded || ""}">
-
-    <label>Address 1</label>
-
-    <input
-    id="editAddress1"
-    type="text"
-    value="${currentOrder.address1 || ""}">
-
-    <label>Address 2</label>
-
-    <input
-    id="editAddress2"
-    type="text"
-    value="${currentOrder.address2 || ""}">
-
-    <label>Town</label>
-
-    <input
-    id="editTown"
-    type="text"
-    value="${currentOrder.town || ""}">
-
-    <label>County</label>
-
-    <input
-    id="editCounty"
-    type="text"
-    value="${currentOrder.county || ""}">
-
-    <label>Postcode</label>
-
-    <input
-    id="editPostcode"
-    type="text"
-    value="${currentOrder.postcode || ""}">
-
-    `;
-
-    document.getElementById("editDeliveryMethod").value =
-    currentOrder.deliveryMethod || "Collection";
-
-    // ---------- NOTES ----------
-
-    notesContent.innerHTML = `
-
-    <label>Order Notes</label>
-
-    <textarea
-    id="editNotes">${currentOrder.orderNotes || ""}</textarea>
-
-    `;
-
-    // ---------- STATUS ----------
-
-    statusContent.innerHTML = `
-
-    <label>Order Status</label>
-
-    <select id="editOrderStatus">
-
-        <option>New Order</option>
-
-        <option>Designing</option>
-
-        <option>Making</option>
-
-        <option>Ready</option>
-
-        <option>Completed</option>
-
-    </select>
-
-    `;
-
-    document.getElementById("editOrderStatus").value =
-    currentOrder.orderStatus || "New Order";
-
-    
+    setupItemEvents();
 
 }
 
-// =====================================
-// SAVE CHANGES
-// =====================================
+/* ==========================================
+   ITEM EVENTS
+========================================== */
 
-saveChangesButton.addEventListener("click",async()=>{
+function setupItemEvents(){
 
-    try{
+    const cards =
+    document.querySelectorAll(".orderItem");
 
-        currentOrder.customerName =
-        document.getElementById("editCustomerName").value;
+    cards.forEach((card,index)=>{
 
-        currentOrder.customerContact =
-        document.getElementById("editCustomerContact").value;
+        const product =
+        card.querySelector(".itemProduct");
 
-        currentOrder.orderSource =
-        document.getElementById("editOrderSource").value;
+        const quantity =
+        card.querySelector(".itemQuantity");
 
-        currentOrder.socialUsername =
-        document.getElementById("editUsername").value;
+        const price =
+        card.querySelector(".itemPrice");
 
-        currentOrder.orderTotal =
-        Number(document.getElementById("editOrderTotal").value);
+        const total =
+        card.querySelector(".itemTotal");
 
-        currentOrder.totalPaid =
-        Number(document.getElementById("editTotalPaid").value);
+        const size =
+        card.querySelector(".itemSize");
 
-        currentOrder.remainingBalance =
-        Number(document.getElementById("editRemainingBalance").value);
+        const colour =
+        card.querySelector(".itemColour");
 
-        currentOrder.paymentStatus =
-        document.getElementById("editPaymentStatus").value;
+        const personalised =
+        card.querySelector(".itemPersonalised");
 
-        currentOrder.deliveryMethod =
-        document.getElementById("editDeliveryMethod").value;
+        const personalisation =
+        card.querySelector(".itemPersonalisation");
 
-        currentOrder.dateNeeded =
-        document.getElementById("editDateNeeded").value;
+        const box =
+        card.querySelector(".personalisationBox");
 
-        currentOrder.address1 =
-        document.getElementById("editAddress1").value;
+        const removeButton =
+        card.querySelector(".removeItemButton");
 
-        currentOrder.address2 =
-        document.getElementById("editAddress2").value;
+        /* -----------------------
+           UPDATE ITEM
+        ----------------------- */
 
-        currentOrder.town =
-        document.getElementById("editTown").value;
+        function updateItem(){
 
-        currentOrder.county =
-        document.getElementById("editCounty").value;
+            items[index].product =
+            product.value;
 
-        currentOrder.postcode =
-        document.getElementById("editPostcode").value;
+            items[index].quantity =
+            Number(quantity.value) || 1;
 
-        currentOrder.orderNotes =
-        document.getElementById("editNotes").value;
+            items[index].unitPrice =
+            Number(price.value) || 0;
 
-        currentOrder.orderStatus =
-        document.getElementById("editOrderStatus").value;
+            items[index].size =
+            size.value;
 
-        // ---------- ITEMS ----------
+            items[index].colour =
+            colour.value;
 
-        currentOrder.items = [];
+            items[index].personalised =
+            personalised.value;
 
-        document.querySelectorAll(".itemCard").forEach(card=>{
+            items[index].personalisation =
+            personalisation.value;
 
-            currentOrder.items.push({
+            items[index].itemTotal =
 
-                product:
-                card.querySelector(".editProduct").value,
+                items[index].quantity *
 
-                quantity:
-                Number(card.querySelector(".editQuantity").value),
+                items[index].unitPrice;
 
-                unitPrice:
-                Number(card.querySelector(".editUnitPrice").value),
+            total.value =
+            items[index].itemTotal.toFixed(2);
 
-                itemTotal:
-                Number(card.querySelector(".editQuantity").value) *
-                Number(card.querySelector(".editUnitPrice").value),
+            calculateOrderTotals();
 
-                size:
-                card.querySelector(".editSize").value,
+            pageChanged = true;
 
-                colour:
-                card.querySelector(".editColour").value,
+        }
 
-                personalised:
-                card.querySelector(".editPersonalised").value,
+        /* -----------------------
+           EVENTS
+        ----------------------- */
 
-                personalisation:
-                card.querySelector(".editPersonalisation").value
+        product.addEventListener(
+            "input",
+            updateItem
+        );
 
-            });
+        quantity.addEventListener(
+            "input",
+            updateItem
+        );
 
-        });
+        price.addEventListener(
+            "input",
+            updateItem
+        );
 
-        currentOrder.updatedAt =
-        serverTimestamp();
+        size.addEventListener(
+            "input",
+            updateItem
+        );
 
-        await updateDoc(
+        colour.addEventListener(
+            "input",
+            updateItem
+        );
 
-            doc(db,"orders",orderId),
+        personalisation.addEventListener(
+            "input",
+            updateItem
+        );
 
-            currentOrder
+        personalised.addEventListener(
+            "change",
+            ()=>{
+
+                box.style.display =
+
+                personalised.value==="Yes"
+
+                ? "block"
+
+                : "none";
+
+                updateItem();
+
+            }
 
         );
 
-        editing = false;
+        /* -----------------------
+           REMOVE ITEM
+        ----------------------- */
 
-        editOrderButton.style.display =
-        "inline-block";
+        removeButton.addEventListener(
+            "click",
+            ()=>{
 
-        saveChangesButton.style.display =
-        "none";
+                if(items.length===1){
 
-        cancelEditButton.style.display =
-        "none";
+                    showToast(
+                        "❌ At least one item is required."
+                    );
 
-        displayOrder();
+                    return;
 
-        alert("Order updated successfully!");
+                }
 
-    }
+                items.splice(index,1);
 
-    catch(error){
+                renderItems();
 
-        console.error(error);
+                calculateOrderTotals();
 
-        alert(error.message);
+                pageChanged = true;
 
-    }
+            }
 
-});
+        );
+
+    });
+
+}
+
+/* ==========================================
+   CALCULATE TOTALS
+========================================== */
+
+function calculateOrderTotals(){
+
+    let total = 0;
+
+    items.forEach(item=>{
+
+        item.itemTotal =
+
+            Number(item.quantity || 0)
+
+            *
+
+            Number(item.unitPrice || 0);
+
+        total += item.itemTotal;
+
+    });
+
+    order.orderTotal = total;
+
+    order.remainingBalance =
+
+        total -
+
+        Number(order.totalPaid || 0);
+
+    orderTotal.textContent =
+
+        "£" +
+
+        total.toFixed(2);
+
+    orderTotalSummary.textContent =
+
+        "£" +
+
+        total.toFixed(2);
+
+    remainingBalance.textContent =
+
+        "£" +
+
+        order.remainingBalance.toFixed(2);
+
+    remainingSummary.textContent =
+
+        "£" +
+
+        order.remainingBalance.toFixed(2);
+
+}
 
