@@ -3,7 +3,11 @@ import { db } from "./firebase.js";
 import {
     collection,
     addDoc,
-    serverTimestamp
+    serverTimestamp,
+    doc,
+    getDoc,
+    setDoc,
+    runTransaction
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
 "use strict";
@@ -53,16 +57,41 @@ const paymentForm = document.getElementById("paymentForm");
 
 let payments = [];
 
-let nextOrderNumber =
-Number(localStorage.getItem("nextOrderNumber")) || 1;
+async function generateOrderNumber() {
 
-// ---------- INITIALISE ----------
+    const counterRef = doc(db, "settings", "orderCounter");
 
-function initialisePage(){
+    const orderNumber = await runTransaction(db, async (transaction) => {
 
-    orderNumber.value =
-    "MTYD-" +
-    String(nextOrderNumber).padStart(4,"0");
+        const counterDoc = await transaction.get(counterRef);
+
+        let lastNumber = 0;
+
+        if (counterDoc.exists()) {
+            lastNumber = counterDoc.data().lastNumber || 0;
+        }
+
+        lastNumber++;
+
+        transaction.set(
+    counterRef,
+    {
+        lastNumber: lastNumber
+    },
+    {
+        merge: true
+    }
+);
+
+        return "MTYD-" + String(lastNumber).padStart(4, "0");
+
+    });
+
+    return orderNumber;
+
+}
+
+async function initialisePage(){
 
     orderDate.value =
     new Date()
@@ -76,8 +105,6 @@ function initialisePage(){
     remainingBalance.value = "0.00";
 
 }
-
-initialisePage();
 
 // =====================================
 // ITEMS
@@ -394,6 +421,12 @@ saveOrderButton.addEventListener("click", saveOrder);
 
 async function saveOrder() {
 
+    const newOrderNumber =
+    await generateOrderNumber();
+
+    orderNumber.value =
+    newOrderNumber;
+
     const items = [];
 
     document.querySelectorAll(".itemCard").forEach(card => {
@@ -462,9 +495,21 @@ async function saveOrder() {
 
         items: items,
 
-        payments: payments,
+payments: payments,
 
-        createdAt: serverTimestamp()
+customerPhotos: [],
+
+trackingNumber: "",
+
+invoiceNumber: "",
+
+archived: false,
+
+completed: false,
+
+createdAt: serverTimestamp(),
+
+updatedAt: serverTimestamp()
 
     };
 
@@ -473,13 +518,6 @@ async function saveOrder() {
         await addDoc(
             collection(db, "orders"),
             order
-        );
-
-        nextOrderNumber++;
-
-        localStorage.setItem(
-            "nextOrderNumber",
-            nextOrderNumber
         );
 
         alert("✅ Order saved successfully!");
