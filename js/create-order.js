@@ -1,4 +1,4 @@
-import { db } from "./firebase.js";
+import { db, storage } from "./firebase.js";
 
 import {
     collection,
@@ -9,6 +9,12 @@ import {
     setDoc,
     runTransaction
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-storage.js";
 
 "use strict";
 
@@ -52,6 +58,12 @@ const saveOrderButton = document.getElementById("saveOrderButton");
 
 const addPaymentButton = document.getElementById("addPaymentButton");
 const paymentForm = document.getElementById("paymentForm");
+
+const customerImages =
+document.getElementById("customerImages");
+
+const mockupImages =
+document.getElementById("mockupImages");
 
 // ---------- VARIABLES ----------
 
@@ -453,6 +465,40 @@ async function saveOrder() {
 
     });
 
+    const customerPhotoUrls = [];
+
+for (const file of customerImages.files) {
+
+    const imageRef = ref(
+        storage,
+        `orders/${newOrderNumber}/customer/${Date.now()}-${file.name}`
+    );
+
+    await uploadBytes(imageRef, file);
+
+    customerPhotoUrls.push(
+        await getDownloadURL(imageRef)
+    );
+
+}
+
+const mockupPhotoUrls = [];
+
+for (const file of mockupImages.files) {
+
+    const imageRef = ref(
+        storage,
+        `orders/${newOrderNumber}/mockups/${Date.now()}-${file.name}`
+    );
+
+    await uploadBytes(imageRef, file);
+
+    mockupPhotoUrls.push(
+        await getDownloadURL(imageRef)
+    );
+
+}
+
     const order = {
 
         orderNumber: orderNumber.value,
@@ -497,7 +543,9 @@ async function saveOrder() {
 
 payments: payments,
 
-customerPhotos: [],
+customerPhotos: customerPhotoUrls,
+
+mockupPhotos: mockupPhotoUrls,
 
 trackingNumber: "",
 
