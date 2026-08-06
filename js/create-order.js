@@ -431,7 +431,10 @@ function updatePayments(){
 // SAVE ORDER
 // =====================================
 
-saveOrderButton.addEventListener("click", saveOrder);
+saveOrderButton.addEventListener("click", () => {
+    alert("Save button clicked");
+    saveOrder();
+});
 
 async function saveOrder() {
 
