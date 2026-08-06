@@ -339,3 +339,919 @@ function showToast(message){
 
 }
 
+/* ==========================================
+   ORDER ITEMS
+========================================== */
+
+addItemButton.addEventListener("click", addItem);
+
+function addItem() {
+
+    items.push({
+
+        product: "",
+        quantity: 1,
+        unitPrice: 0,
+        itemTotal: 0,
+        size: "",
+        colour: "",
+        personalised: "No",
+        personalisation: ""
+
+    });
+
+    renderItems();
+
+}
+
+function renderItems() {
+
+    itemsContainer.innerHTML = "";
+
+    if (items.length === 0) {
+
+        addItem();
+
+        return;
+
+    }
+
+    items.forEach((item, index) => {
+
+        const card = document.createElement("div");
+
+        card.className = "itemCard";
+
+        card.innerHTML = `
+
+<div class="detailsGrid">
+
+<div class="formGroup">
+
+<label>Product</label>
+
+<input
+class="itemProduct"
+type="text"
+value="${item.product || ""}">
+
+</div>
+
+<div class="formGroup">
+
+<label>Quantity</label>
+
+<input
+class="itemQuantity"
+type="number"
+min="1"
+value="${item.quantity || 1}">
+
+</div>
+
+<div class="formGroup">
+
+<label>Price (£)</label>
+
+<input
+class="itemPrice"
+type="number"
+step="0.01"
+value="${item.unitPrice || 0}">
+
+</div>
+
+<div class="formGroup">
+
+<label>Total (£)</label>
+
+<input
+class="itemTotal"
+readonly
+value="${Number(item.itemTotal || 0).toFixed(2)}">
+
+</div>
+
+<div class="formGroup">
+
+<label>Size</label>
+
+<input
+class="itemSize"
+type="text"
+value="${item.size || ""}">
+
+</div>
+
+<div class="formGroup">
+
+<label>Colour</label>
+
+<input
+class="itemColour"
+type="text"
+value="${item.colour || ""}">
+
+</div>
+
+<div class="formGroup">
+
+<label>Personalised</label>
+
+<select class="itemPersonalised">
+
+<option value="No" ${item.personalised==="No"?"selected":""}>No</option>
+
+<option value="Yes" ${item.personalised==="Yes"?"selected":""}>Yes</option>
+
+</select>
+
+</div>
+
+<div class="formGroup personalisationGroup">
+
+<label>Personalisation</label>
+
+<input
+class="itemPersonalisation"
+type="text"
+value="${item.personalisation || ""}">
+
+</div>
+
+</div>
+
+<div style="margin-top:15px;">
+
+<button
+class="dangerButton removeItemButton">
+
+🗑 Remove Item
+
+</button>
+
+</div>
+
+`;
+
+        itemsContainer.appendChild(card);
+
+        setupItem(card, index);
+
+    });
+
+}
+
+function setupItem(card, index) {
+
+    const product = card.querySelector(".itemProduct");
+    const quantity = card.querySelector(".itemQuantity");
+    const price = card.querySelector(".itemPrice");
+    const total = card.querySelector(".itemTotal");
+    const size = card.querySelector(".itemSize");
+    const colour = card.querySelector(".itemColour");
+    const personalised = card.querySelector(".itemPersonalised");
+    const personalisation = card.querySelector(".itemPersonalisation");
+
+    function update() {
+
+        items[index].product = product.value;
+
+        items[index].quantity =
+        Number(quantity.value);
+
+        items[index].unitPrice =
+        Number(price.value);
+
+        items[index].itemTotal =
+        items[index].quantity *
+        items[index].unitPrice;
+
+        items[index].size =
+        size.value;
+
+        items[index].colour =
+        colour.value;
+
+        items[index].personalised =
+        personalised.value;
+
+        items[index].personalisation =
+        personalisation.value;
+
+        total.value =
+        items[index].itemTotal.toFixed(2);
+
+        updateTotals();
+
+    }
+
+    product.oninput = update;
+    quantity.oninput = update;
+    price.oninput = update;
+    size.oninput = update;
+    colour.oninput = update;
+    personalised.onchange = update;
+    personalisation.oninput = update;
+
+    card.querySelector(".removeItemButton")
+    .onclick = () => {
+
+        items.splice(index,1);
+
+        renderItems();
+
+        updateTotals();
+
+    };
+
+}
+
+function updateTotals(){
+
+    let grandTotal = 0;
+
+    items.forEach(item=>{
+
+        grandTotal +=
+        Number(item.itemTotal || 0);
+
+    });
+
+    order.orderTotal = grandTotal;
+
+    order.remainingBalance =
+    grandTotal -
+    Number(order.totalPaid || 0);
+
+    orderTotal.textContent =
+    "£" + grandTotal.toFixed(2);
+
+    orderTotalSummary.textContent =
+    "£" + grandTotal.toFixed(2);
+
+    remainingBalance.textContent =
+    "£" + order.remainingBalance.toFixed(2);
+
+    remainingSummary.textContent =
+    "£" + order.remainingBalance.toFixed(2);
+
+}
+
+/* ==========================================
+   PAYMENTS
+========================================== */
+
+addPaymentButton.addEventListener("click", () => {
+
+    paymentForm.style.display = "block";
+
+    paymentDate.value =
+    new Date().toISOString().split("T")[0];
+
+});
+
+savePaymentButton.addEventListener(
+    "click",
+    savePayment
+);
+
+function savePayment(){
+
+    const amount =
+    Number(paymentAmount.value);
+
+    if(amount <= 0){
+
+        showToast(
+            "Enter a valid payment amount."
+        );
+
+        return;
+
+    }
+
+    payments.push({
+
+        date:
+        paymentDate.value,
+
+        amount:
+        amount,
+
+        method:
+        paymentMethod.value,
+
+        notes:
+        paymentNotes.value
+
+    });
+
+    paymentForm.style.display = "none";
+
+    paymentAmount.value = "";
+
+    paymentNotes.value = "";
+
+    renderPayments();
+
+}
+
+function renderPayments(){
+
+    paymentHistory.innerHTML = "";
+
+    if(payments.length === 0){
+
+        paymentHistory.innerHTML = `
+
+<p class="emptyMessage">
+
+No payments recorded.
+
+</p>
+
+`;
+
+        updatePaymentSummary();
+
+        return;
+
+    }
+
+    payments.forEach((payment,index)=>{
+
+        const card =
+        document.createElement("div");
+
+        card.className =
+        "paymentEntry";
+
+        card.innerHTML = `
+
+<strong>
+
+£${payment.amount.toFixed(2)}
+
+</strong>
+
+<p>
+
+${payment.method}
+
+</p>
+
+<p>
+
+${payment.date}
+
+</p>
+
+<p>
+
+${payment.notes || ""}
+
+</p>
+
+<button
+class="dangerButton deletePaymentButton">
+
+🗑 Remove
+
+</button>
+
+`;
+
+        card.querySelector(".deletePaymentButton")
+
+        .onclick = ()=>{
+
+            payments.splice(index,1);
+
+            renderPayments();
+
+        };
+
+        paymentHistory.appendChild(card);
+
+    });
+
+    updatePaymentSummary();
+
+}
+
+function updatePaymentSummary(){
+
+    let paid = 0;
+
+    payments.forEach(payment=>{
+
+        paid +=
+        Number(payment.amount);
+
+    });
+
+    order.totalPaid = paid;
+
+    order.remainingBalance =
+
+        Number(order.orderTotal || 0)
+
+        -
+
+        paid;
+
+    if(paid === 0){
+
+        order.paymentStatus =
+        "Not Paid";
+
+    }
+
+    else if(
+
+        paid >=
+        Number(order.orderTotal)
+
+    ){
+
+        order.paymentStatus =
+        "Paid in Full";
+
+    }
+
+    else{
+
+        order.paymentStatus =
+        "Deposit Paid";
+
+    }
+
+    totalPaid.textContent =
+
+    "£" +
+
+    paid.toFixed(2);
+
+    remainingBalance.textContent =
+
+    "£" +
+
+    order.remainingBalance.toFixed(2);
+
+    remainingSummary.textContent =
+
+    "£" +
+
+    order.remainingBalance.toFixed(2);
+
+    paymentStatus.textContent =
+
+    order.paymentStatus;
+
+}
+
+/* ==========================================
+   SAVE ORDER
+========================================== */
+
+saveChangesButton.addEventListener(
+    "click",
+    saveOrder
+);
+
+async function saveOrder(){
+
+    if(saving) return;
+
+    saving = true;
+
+    try{
+
+        order.customerName =
+        customerName.value.trim();
+
+        order.customerContact =
+        customerContact.value.trim();
+
+        order.orderSource =
+        orderSource.value;
+
+        order.socialUsername =
+        socialUsername.value.trim();
+
+        order.deliveryMethod =
+        deliveryMethod.value;
+
+        order.dateNeeded =
+        dateNeeded.value;
+
+        order.address1 =
+        address1.value.trim();
+
+        order.address2 =
+        address2.value.trim();
+
+        order.town =
+        town.value.trim();
+
+        order.county =
+        county.value.trim();
+
+        order.postcode =
+        postcode.value.trim();
+
+        order.orderNotes =
+        orderNotes.value.trim();
+
+        order.orderStatus =
+        orderStatus.value;
+
+        order.items = items;
+
+        order.payments = payments;
+
+        order.customerPhotos =
+        customerPhotos;
+
+        order.updatedAt =
+        serverTimestamp();
+
+        await updateDoc(
+
+            doc(
+                db,
+                "orders",
+                orderId
+            ),
+
+            order
+
+        );
+
+        customerNameSummary.textContent =
+        order.customerName;
+
+        dateNeededSummary.textContent =
+        order.dateNeeded;
+
+        statusBadge.textContent =
+        order.orderStatus;
+
+        showToast(
+            "Order saved successfully."
+        );
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        showToast(
+            "Unable to save order."
+        );
+
+    }
+
+    finally{
+
+        saving = false;
+
+    }
+
+}
+
+/* ==========================================
+   DUPLICATE ORDER
+========================================== */
+
+duplicateOrderButton.addEventListener(
+    "click",
+    duplicateOrder
+);
+
+async function duplicateOrder(){
+
+    try{
+
+        const duplicate = {
+
+            ...order,
+
+            orderNumber:
+            order.orderNumber + "-COPY",
+
+            createdAt:
+            serverTimestamp(),
+
+            updatedAt:
+            serverTimestamp()
+
+        };
+
+        delete duplicate.id;
+
+        await addDoc(
+
+            collection(
+                db,
+                "orders"
+            ),
+
+            duplicate
+
+        );
+
+        showToast(
+            "Order duplicated."
+        );
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        showToast(
+            "Unable to duplicate order."
+        );
+
+    }
+
+}
+
+/* ==========================================
+   DELETE ORDER
+========================================== */
+
+deleteOrderButton.addEventListener(
+    "click",
+    () => {
+
+        deleteModal.classList.remove(
+            "hidden"
+        );
+
+    }
+);
+
+cancelDelete.addEventListener(
+    "click",
+    () => {
+
+        deleteModal.classList.add(
+            "hidden"
+        );
+
+    }
+);
+
+confirmDelete.addEventListener(
+    "click",
+    confirmDeleteOrder
+);
+
+async function confirmDeleteOrder(){
+
+    try{
+
+        await deleteDoc(
+
+            doc(
+                db,
+                "orders",
+                orderId
+            )
+
+        );
+
+        window.location.href =
+        "orders.html";
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        showToast(
+            "Unable to delete order."
+        );
+
+    }
+
+}
+
+/* ==========================================
+   CUSTOMER PHOTOS
+========================================== */
+
+uploadPhotosButton.addEventListener(
+    "click",
+    () => customerImages.click()
+);
+
+customerImages.addEventListener(
+    "change",
+    uploadPhotos
+);
+
+async function uploadPhotos(event){
+
+    const files = [...event.target.files];
+
+    for(const file of files){
+
+        try{
+
+            const fileName =
+            Date.now() + "-" + file.name;
+
+            const storageRef = ref(
+                storage,
+                `orders/${orderId}/${fileName}`
+            );
+
+            await uploadBytes(
+                storageRef,
+                file
+            );
+
+            const url =
+            await getDownloadURL(
+                storageRef
+            );
+
+            customerPhotos.push({
+
+                name:file.name,
+
+                url:url,
+
+                path:storageRef.fullPath
+
+            });
+
+        }
+
+        catch(error){
+
+            console.error(error);
+
+        }
+
+    }
+
+    renderPhotos();
+
+    showToast("Photos uploaded.");
+
+}
+
+function renderPhotos(){
+
+    customerGallery.innerHTML = "";
+
+    if(customerPhotos.length===0){
+
+        customerGallery.innerHTML = `
+
+<p class="emptyMessage">
+
+No customer photos uploaded.
+
+</p>
+
+`;
+
+        return;
+
+    }
+
+    customerPhotos.forEach((photo,index)=>{
+
+        const card =
+        document.createElement("div");
+
+        card.className =
+        "photoCard";
+
+        card.innerHTML = `
+
+<img
+src="${photo.url}"
+class="galleryPhoto">
+
+<button
+class="dangerButton">
+
+🗑
+
+</button>
+
+`;
+
+        const image =
+        card.querySelector("img");
+
+        image.onclick = ()=>{
+
+            photoPreview.src =
+            photo.url;
+
+            photoModal.classList.remove(
+                "hidden"
+            );
+
+        };
+
+        card.querySelector("button")
+        .onclick = ()=>{
+
+            deletePhoto(index);
+
+        };
+
+        customerGallery.appendChild(card);
+
+    });
+
+}
+
+async function deletePhoto(index){
+
+    try{
+
+        const photo =
+        customerPhotos[index];
+
+        if(photo.path){
+
+            await deleteObject(
+                ref(storage,photo.path)
+            );
+
+        }
+
+        customerPhotos.splice(index,1);
+
+        renderPhotos();
+
+        showToast(
+            "Photo deleted."
+        );
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        showToast(
+            "Unable to delete photo."
+        );
+
+    }
+
+}
+
+closePhotoModal.addEventListener(
+    "click",
+    ()=>{
+
+        photoModal.classList.add(
+            "hidden"
+        );
+
+    }
+);
+
+photoModal.addEventListener(
+    "click",
+    e=>{
+
+        if(e.target===photoModal){
+
+            photoModal.classList.add(
+                "hidden"
+            );
+
+        }
+
+    }
+);
+
+/* ==========================================
+   FINISH
+========================================== */
+
+renderItems();
+
+renderPayments();
+
+renderPhotos();
+
+showToast(
+    "Order loaded."
+);
