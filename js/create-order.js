@@ -118,6 +118,8 @@ async function initialisePage(){
 
 }
 
+initialisePage();
+
 // =====================================
 // ITEMS
 // =====================================
