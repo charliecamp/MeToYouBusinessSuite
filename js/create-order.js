@@ -432,7 +432,6 @@ function updatePayments(){
 // =====================================
 
 saveOrderButton.addEventListener("click", () => {
-    alert("Save button clicked");
     saveOrder();
 });
 
